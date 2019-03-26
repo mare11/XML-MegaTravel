@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="https://github.com/mare11/XML_MegaTravel/accommodation"
+    xmlns:acm="https://github.com/mare11/XML_MegaTravel/accommodation"
+    xmlns:loc="https://github.com/mare11/XML_MegaTravel/location"
+    xmlns:ag="https://github.com/mare11/XML_MegaTravel/agent"
+    xmlns:user="https://github.com/mare11/XML_MegaTravel/user">
+    <xs:import namespace="https://github.com/mare11/XML_MegaTravel/user" schemaLocation="Users.xsd"/>
+    <xs:element name="Accommodation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="type" type="acm:TAccommodation"/>
+                <xs:element name="category">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:int">
+                            <xs:minInclusive value="0"/>
+                            <xs:maxInclusive value="5"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="additionalService"
+                    type="acm:TAdditional_services"/>
+                <xs:element name="freeCancellation" type="xs:boolean"/>
+                <xs:element name="cancellationDays">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:int">
+                            <xs:totalDigits value="2"/>
+                            <xs:minInclusive value="0"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element minOccurs="1" name="cancellationPrice" type="acm:TPrice"/>
+                <xs:element name="description">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="200"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="1" name="images" type="xs:base64Binary"
+                    > </xs:element>
+                <xs:element name="numberOfPersons">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:int">
+                            <xs:totalDigits value="2"/>
+                            <xs:minInclusive value="0"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element ref="user:Agent"/>
+                <xs:element name="defaultPrice" type="acm:TPrice"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:PeriodPrice"/>
+                <xs:element ref="acm:Location"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="TAccommodation">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="hotel"/>
+            <xs:enumeration value="bed&amp;breakfast"/>
+            <xs:enumeration value="apartment"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TAdditional_services">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Parking"/>
+            <xs:enumeration value="WiFi"/>
+            <xs:enumeration value="Breakfast"/>
+            <xs:enumeration value="Half Board"/>
+            <xs:enumeration value="Full Board"/>
+            <xs:enumeration value="All Inclusive"/>
+            <xs:enumeration value="Pets allowed"/>
+            <xs:enumeration value="TV"/>
+            <xs:enumeration value="Kitchen"/>
+            <xs:enumeration value="Private Bathroom"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TPrice">
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="6"/>
+            <xs:fractionDigits value="2"/>
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="Location">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="country" type="xs:string"/>
+                <xs:element name="city" type="xs:string"/>
+                <xs:element name="address" type="xs:string"/>
+                <xs:element default="0.0" name="latitude">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:minInclusive value="-90"/>
+                            <xs:maxInclusive value="90"/>
+                            <xs:totalDigits value="8"/>
+                            <xs:fractionDigits value="6"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element default="0.0" name="longitude">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:minInclusive value="-180"/>
+                            <xs:maxInclusive value="180"/>
+                            <xs:totalDigits value="9"/>
+                            <xs:fractionDigits value="6"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PeriodPrice">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="startDate" type="xs:date"/>
+                <xs:element name="endDate" type="xs:date"/>
+                <xs:element name="price" type="acm:TPrice"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Unavailability">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="startDate" type="xs:date"/>
+                <xs:element name="endDate" type="xs:date"/>
+                <xs:element ref="acm:Accommodation"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
