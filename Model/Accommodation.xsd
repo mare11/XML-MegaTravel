@@ -9,7 +9,7 @@
     <xs:element name="Accommodation">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="type" type="acm:TAccommodation"/>
+                <xs:element ref="acm:AccommodationType"/>
                 <xs:element name="category">
                     <xs:simpleType>
                         <xs:restriction base="xs:int">
@@ -18,8 +18,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element maxOccurs="unbounded" minOccurs="0" name="additionalService"
-                    type="acm:TAdditional_services"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:AdditionalService"/>
                 <xs:element name="freeCancellation" type="xs:boolean"/>
                 <xs:element name="cancellationDays">
                     <xs:simpleType>
@@ -54,27 +53,6 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:simpleType name="TAccommodation">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="hotel"/>
-            <xs:enumeration value="bed&amp;breakfast"/>
-            <xs:enumeration value="apartment"/>
-        </xs:restriction>
-    </xs:simpleType>
-    <xs:simpleType name="TAdditional_services">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="Parking"/>
-            <xs:enumeration value="WiFi"/>
-            <xs:enumeration value="Breakfast"/>
-            <xs:enumeration value="Half Board"/>
-            <xs:enumeration value="Full Board"/>
-            <xs:enumeration value="All Inclusive"/>
-            <xs:enumeration value="Pets allowed"/>
-            <xs:enumeration value="TV"/>
-            <xs:enumeration value="Kitchen"/>
-            <xs:enumeration value="Private Bathroom"/>
-        </xs:restriction>
-    </xs:simpleType>
     <xs:simpleType name="TPrice">
         <xs:restriction base="xs:decimal">
             <xs:totalDigits value="6"/>
@@ -126,6 +104,32 @@
                 <xs:element name="startDate" type="xs:date"/>
                 <xs:element name="endDate" type="xs:date"/>
                 <xs:element ref="acm:Accommodation"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="AccommodationType">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="typeName">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="40"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="AdditionalService">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="additionalServiceName">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="40"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
