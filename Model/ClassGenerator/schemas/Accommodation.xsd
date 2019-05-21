@@ -5,19 +5,22 @@
     xmlns:loc="https://github.com/mare11/XML_MegaTravel/location"
     xmlns:ag="https://github.com/mare11/XML_MegaTravel/agent"
     xmlns:user="https://github.com/mare11/XML_MegaTravel/user"
-    xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0">
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0"
+    xmlns:res="https://github.com/mare11/XML_MegaTravel/reservation">
     <xs:import namespace="https://github.com/mare11/XML_MegaTravel/user" schemaLocation="Users.xsd"/>
+    <xs:import namespace="https://github.com/mare11/XML_MegaTravel/reservation"
+        schemaLocation="Reservation.xsd"/>
     <xs:element name="Accommodation">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="acm:AccommodationType"/>
                 <xs:element name="category">
                     <xs:simpleType>
-                    	<xs:annotation>
-							<xs:appinfo>
+                        <xs:annotation>
+                            <xs:appinfo>
 								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
 							</xs:appinfo>
-						</xs:annotation>
+                        </xs:annotation>
                         <xs:restriction base="xs:int">
                             <xs:minInclusive value="0"/>
                             <xs:maxInclusive value="5"/>
@@ -26,19 +29,19 @@
                 </xs:element>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:AdditionalService"/>
                 <xs:element name="freeCancellation" type="xs:boolean">
-                	<xs:annotation>
-						<xs:appinfo>
+                    <xs:annotation>
+                        <xs:appinfo>
 							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
 						</xs:appinfo>
-					</xs:annotation>
+                    </xs:annotation>
                 </xs:element>
                 <xs:element name="cancellationDays">
                     <xs:simpleType>
-                    	<xs:annotation>
-							<xs:appinfo>
+                        <xs:annotation>
+                            <xs:appinfo>
 								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
 							</xs:appinfo>
-						</xs:annotation>
+                        </xs:annotation>
                         <xs:restriction base="xs:int">
                             <xs:totalDigits value="2"/>
                             <xs:minInclusive value="0"/>
@@ -57,11 +60,11 @@
                     > </xs:element>
                 <xs:element name="numberOfPersons">
                     <xs:simpleType>
-                    	<xs:annotation>
-							<xs:appinfo>
+                        <xs:annotation>
+                            <xs:appinfo>
 								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
 							</xs:appinfo>
-						</xs:annotation>
+                        </xs:annotation>
                         <xs:restriction base="xs:int">
                             <xs:totalDigits value="2"/>
                             <xs:minInclusive value="0"/>
@@ -72,6 +75,8 @@
                 <xs:element name="defaultPrice" type="acm:TPrice"/>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:PeriodPrice"/>
                 <xs:element ref="acm:Location"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:Unavailability"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="res:Reservation"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -115,20 +120,21 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="startDate" type="xs:date">
-                	<xs:annotation>
-						<xs:appinfo>
+                    <xs:annotation>
+                        <xs:appinfo>
 							<jxb:javaType name="java.time.LocalDate" parseMethod="org.xmlws.util.TypeConverter.parseDate"/>
 						</xs:appinfo>
-					</xs:annotation>
+                    </xs:annotation>
                 </xs:element>
                 <xs:element name="endDate" type="xs:date">
-                	<xs:annotation>
-						<xs:appinfo>
+                    <xs:annotation>
+                        <xs:appinfo>
 							<jxb:javaType name="java.time.LocalDate" parseMethod="org.xmlws.util.TypeConverter.parseDate"/>
 						</xs:appinfo>
-					</xs:annotation>
+                    </xs:annotation>
                 </xs:element>
                 <xs:element name="price" type="acm:TPrice"/>
+                <xs:element ref="acm:Accommodation"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -136,18 +142,18 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="startDate" type="xs:date">
-                	<xs:annotation>
-						<xs:appinfo>
+                    <xs:annotation>
+                        <xs:appinfo>
 							<jxb:javaType name="java.time.LocalDate" parseMethod="org.xmlws.util.TypeConverter.parseDate"/>
 						</xs:appinfo>
-					</xs:annotation>
+                    </xs:annotation>
                 </xs:element>
                 <xs:element name="endDate" type="xs:date">
-                	<xs:annotation>
-						<xs:appinfo>
+                    <xs:annotation>
+                        <xs:appinfo>
 							<jxb:javaType name="java.time.LocalDate" parseMethod="org.xmlws.util.TypeConverter.parseDate"/>
 						</xs:appinfo>
-					</xs:annotation>
+                    </xs:annotation>
                 </xs:element>
                 <xs:element ref="acm:Accommodation"/>
             </xs:sequence>
@@ -176,6 +182,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:Accommodation"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

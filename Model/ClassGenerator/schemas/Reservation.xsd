@@ -84,8 +84,6 @@
     <xs:element name="Message">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="user:Agent"/>
-                <xs:element ref="user:User"/>
                 <xs:element name="content">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
@@ -101,6 +99,7 @@
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="direction" type="res:DirectionEnum"> </xs:element>
+                <xs:element ref="res:Reservation"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
