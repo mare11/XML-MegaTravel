@@ -1,0 +1,32 @@
+<project name="XMLParsers (JAXB)" default="main" basedir=".">
+  	<property name="lib.dir" value="${basedir}/lib"/>
+  	<property name="schemas.dir" value="${basedir}/schemas"/>
+	<property name="gen_classes.dir" value="${basedir}/generated_classes"/>
+	
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+	  <classpath>
+	    <fileset dir="${lib.dir}" includes="*.jar" />
+	  </classpath>
+	</taskdef>
+	
+	<target name="init">
+	    <echo message="basedir = ${basedir}"/>
+	    <echo message="build.compiler = ${build.compiler}"/>
+	    <echo message="java.home = ${java.home}"/>
+	    <echo message="java.class.path = ${java.class.path}"/>
+	</target>
+	
+	<target name="generate_accommodation" depends="init">
+		<xjc schema="${schemas.dir}/Accommodation.xsd" destdir="${gen_classes.dir}"/>
+	</target>
+	
+	<target name="generate_reservation" depends="init">
+		<xjc schema="${schemas.dir}/Reservation.xsd" destdir="${gen_classes.dir}"/>
+	</target>
+	
+	<target name="generate_users" depends="init">
+		<xjc schema="${schemas.dir}/Users.xsd" destdir="${gen_classes.dir}"/>
+	</target>
+	
+	<target name="main" depends="generate_accommodation, generate_reservation, generate_users"/>
+</project>

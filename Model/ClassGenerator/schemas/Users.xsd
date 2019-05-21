@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="https://github.com/mare11/XML_MegaTravel/user"
+    xmlns:user="https://github.com/mare11/XML_MegaTravel/user"
+    xmlns:res="https://github.com/mare11/XML_MegaTravel/reservation"
+    xmlns:acm="https://github.com/mare11/XML_MegaTravel/accommodation"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0">
+    <xs:import namespace="https://github.com/mare11/XML_MegaTravel/reservation"
+        schemaLocation="Reservation.xsd"/>
+    <xs:import namespace="https://github.com/mare11/XML_MegaTravel/accommodation"
+        schemaLocation="Accommodation.xsd"/>
+    <xs:element name="Administrator">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="username">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="4"/>
+                            <xs:maxLength value="16"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="password">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="6"/>
+                            <xs:maxLength value="20"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Agent">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="username">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="6"/>
+                            <xs:maxLength value="20"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="password">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="6"/>
+                            <xs:maxLength value="16"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="email">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[a-zA-Z0-9_.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.-]+"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="name">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="lastname">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="adress">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="bussinesID">
+                    <xs:simpleType>
+                    	<xs:annotation>
+							<xs:appinfo>
+								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
+							</xs:appinfo>
+						</xs:annotation>
+                        <xs:restriction base="xs:int">
+                            <xs:minInclusive value="0"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:Accommodation"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="User">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="username">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="4"/>
+                            <xs:maxLength value="16"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="password">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="6"/>
+                            <xs:maxLength value="20"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="email">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[a-zA-Z0-9_.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.-]+"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="name">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="lastname">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="enabled" type="xs:boolean" default="false">
+                	<xs:annotation>
+						<xs:appinfo>
+							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
+						</xs:appinfo>
+					</xs:annotation>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="res:Reservation"/>
+                <xs:element default="false" name="deleted" type="xs:boolean">
+                	<xs:annotation>
+						<xs:appinfo>
+							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
+						</xs:appinfo>
+					</xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
