@@ -10,20 +10,20 @@ package https.github_com.mare11.xml_megatravel.user;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class Adapter1
-    extends XmlAdapter<String, Integer>
+public class Adapter5
+    extends XmlAdapter<String, Long>
 {
 
 
-    public Integer unmarshal(String value) {
-        return (org.xmlws.util.TypeConverter.parseInteger(value));
+    public Long unmarshal(String value) {
+        return (org.xmlws.util.TypeConverter.parseLong(value));
     }
 
-    public String marshal(Integer value) {
+    public String marshal(Long value) {
         if (value == null) {
             return null;
         }
-        return (javax.xml.bind.DatatypeConverter.printInt((int)(int)value));
+        return (javax.xml.bind.DatatypeConverter.printLong((long)(long)value));
     }
 
 }

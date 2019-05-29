@@ -6,24 +6,25 @@
 //
 
 
-package https.github_com.mare11.xml_megatravel.user;
+package https.github_com.mare11.xml_megatravel.reservation;
 
+import java.time.LocalDateTime;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class Adapter1
-    extends XmlAdapter<String, Integer>
+public class Adapter8
+    extends XmlAdapter<String, LocalDateTime>
 {
 
 
-    public Integer unmarshal(String value) {
-        return (org.xmlws.util.TypeConverter.parseInteger(value));
+    public LocalDateTime unmarshal(String value) {
+        return (org.xmlws.util.TypeConverter.parseDateTime(value));
     }
 
-    public String marshal(Integer value) {
+    public String marshal(LocalDateTime value) {
         if (value == null) {
             return null;
         }
-        return (javax.xml.bind.DatatypeConverter.printInt((int)(int)value));
+        return value.toString();
     }
 
 }

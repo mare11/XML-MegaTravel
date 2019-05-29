@@ -28,4 +28,9 @@ public class TypeConverter
 	{
 		return new Integer(value);
 	}
+	
+	public static Long parseLong(String value)
+	{
+		return new Long(value);
+	}
 }

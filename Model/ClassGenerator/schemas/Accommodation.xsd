@@ -56,8 +56,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element maxOccurs="unbounded" minOccurs="1" name="images" type="xs:base64Binary"
-                    > </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="1" name="images" type="xs:string"> </xs:element>
                 <xs:element name="numberOfPersons">
                     <xs:simpleType>
                         <xs:annotation>
@@ -77,6 +76,13 @@
                 <xs:element ref="acm:Location"/>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:Unavailability"/>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="res:Reservation"/>
+                <xs:element name="id" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -113,6 +119,13 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
+                <xs:element name="id" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -134,7 +147,13 @@
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="price" type="acm:TPrice"/>
-                <xs:element ref="acm:Accommodation"/>
+                <xs:element name="id" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -155,7 +174,13 @@
 						</xs:appinfo>
                     </xs:annotation>
                 </xs:element>
-                <xs:element ref="acm:Accommodation"/>
+                <xs:element name="id" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -168,6 +193,13 @@
                             <xs:maxLength value="40"/>
                         </xs:restriction>
                     </xs:simpleType>
+                </xs:element>
+                <xs:element name="id" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
@@ -182,7 +214,13 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:Accommodation"/>
+                <xs:element name="id" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
