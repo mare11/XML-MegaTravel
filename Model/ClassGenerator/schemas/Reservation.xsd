@@ -13,8 +13,20 @@
     <xs:element name="Reservation">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="acm:Accommodation"/>
-                <xs:element ref="user:User"/>
+                <xs:element name="accommodationId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="userId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element name="startDate" type="xs:date">
                     <xs:annotation>
                         <xs:appinfo>
@@ -85,13 +97,6 @@
 						</xs:appinfo>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
-                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -113,13 +118,6 @@
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="direction" type="res:DirectionEnum"> </xs:element>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
-                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

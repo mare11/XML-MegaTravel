@@ -13,7 +13,13 @@
     <xs:element name="Accommodation">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="acm:AccommodationType"/>
+                <xs:element name="accommodationTypeId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element name="category">
                     <xs:simpleType>
                         <xs:annotation>
@@ -27,7 +33,13 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:AdditionalService"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="additionalServiceIds" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element name="freeCancellation" type="xs:boolean">
                     <xs:annotation>
                         <xs:appinfo>
@@ -70,12 +82,30 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element ref="user:Agent"/>
+                <xs:element name="agentId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element name="defaultPrice" type="acm:TPrice"/>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:PeriodPrice"/>
-                <xs:element ref="acm:Location"/>
+                <xs:element name="locationId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:Unavailability"/>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="res:Reservation"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="reservationIds" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element name="id" type="xs:long">
                     <xs:annotation>
                         <xs:appinfo>
@@ -147,13 +177,6 @@
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="price" type="acm:TPrice"/>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
-                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -174,26 +197,13 @@
 						</xs:appinfo>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
-                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
     <xs:element name="AccommodationType">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="typeName">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="40"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
+                <xs:element name="typeName" type="xs:string"/>
                 <xs:element name="id" type="xs:long">
                     <xs:annotation>
                         <xs:appinfo>

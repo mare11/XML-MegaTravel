@@ -10,7 +10,7 @@ package https.github_com.mare11.xml_megatravel.accommodation;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class Adapter6
+public class Adapter15
     extends XmlAdapter<String, Long>
 {
 

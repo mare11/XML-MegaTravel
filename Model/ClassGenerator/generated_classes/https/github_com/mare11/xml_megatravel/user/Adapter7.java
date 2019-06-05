@@ -6,24 +6,24 @@
 //
 
 
-package https.github_com.mare11.xml_megatravel.accommodation;
+package https.github_com.mare11.xml_megatravel.user;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class Adapter6
-    extends XmlAdapter<String, Long>
+public class Adapter7
+    extends XmlAdapter<String, Boolean>
 {
 
 
-    public Long unmarshal(String value) {
-        return (org.xmlws.util.TypeConverter.parseLong(value));
+    public Boolean unmarshal(String value) {
+        return (org.xmlws.util.TypeConverter.parseBoolean(value));
     }
 
-    public String marshal(Long value) {
+    public String marshal(Boolean value) {
         if (value == null) {
             return null;
         }
-        return (javax.xml.bind.DatatypeConverter.printLong((long)(long)value));
+        return (javax.xml.bind.DatatypeConverter.printBoolean((boolean)(boolean)value));
     }
 
 }

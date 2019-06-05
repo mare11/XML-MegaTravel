@@ -6,11 +6,11 @@
 //
 
 
-package https.github_com.mare11.xml_megatravel.accommodation;
+package https.github_com.mare11.xml_megatravel.user;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class Adapter6
+public class Adapter8
     extends XmlAdapter<String, Long>
 {
 
