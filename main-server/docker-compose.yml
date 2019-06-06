@@ -1,0 +1,96 @@
+version: '3'
+services:
+
+  discovery:
+    image: discovery-service
+    container_name: discovery-service
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+
+  gateway:
+    image: gateway-service
+    container_name: gateway-service
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    ports:
+      - "8762:8762"
+    depends_on:
+      - discovery
+    links:
+      - discovery:discovery
+
+  accommodation-service:
+    image: accommodation-service
+    build:
+      context: ./accommodation-service
+      dockerfile: Dockerfile
+    ports:
+      - "2222"
+    depends_on:
+      - discovery
+    links:
+      - discovery:discovery
+
+  authentication-service:
+    image: authentication-service
+    build:
+      context: ./authentication-service
+      dockerfile: Dockerfile
+    ports:
+      - "2222"
+    depends_on:
+      - discovery
+    links:
+      - discovery:discovery
+      
+  registration-service:
+    image: registration-service
+    build:
+      context: ./registration-service
+      dockerfile: Dockerfile
+    ports:
+      - "2222"
+    depends_on:
+      - discovery
+    links:
+      - discovery:discovery
+ 
+  reservation-service:
+    image: reservation-service
+    build:
+      context: ./reservation-service
+      dockerfile: Dockerfile
+    ports:
+      - "2222"
+    depends_on:
+      - discovery
+    links:
+      - discovery:discovery    
+
+  search-service:
+    image: search-service
+    build:
+      context: ./search-service
+      dockerfile: Dockerfile
+    ports:
+      - "2222"
+    depends_on:
+      - discovery
+    links:
+      - discovery:discovery     
+
+  user-service:
+    image: user-service
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "2222"
+    depends_on:
+      - discovery
+    links:
+      - discovery:discovery  
