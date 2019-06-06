@@ -50,13 +50,6 @@
                 </xs:element>
                 <xs:element ref="res:ReservationRating"/>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="res:Message"/>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
-                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

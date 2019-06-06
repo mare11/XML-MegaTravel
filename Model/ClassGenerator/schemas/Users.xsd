@@ -28,13 +28,6 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
-                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -108,13 +101,6 @@
                         </xs:appinfo>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
-                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -179,13 +165,6 @@
                         <xs:appinfo>
 							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
 						</xs:appinfo>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>

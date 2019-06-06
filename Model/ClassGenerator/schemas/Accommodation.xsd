@@ -33,7 +33,8 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element maxOccurs="unbounded" minOccurs="0" name="additionalServiceIds" type="xs:long">
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="additionalServiceIds"
+                    type="xs:long">
                     <xs:annotation>
                         <xs:appinfo>
                             <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
@@ -106,13 +107,6 @@
                         </xs:appinfo>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
-                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -148,13 +142,6 @@
                             <xs:fractionDigits value="6"/>
                         </xs:restriction>
                     </xs:simpleType>
-                </xs:element>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
@@ -204,13 +191,6 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="typeName" type="xs:string"/>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
-                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -223,13 +203,6 @@
                             <xs:maxLength value="40"/>
                         </xs:restriction>
                     </xs:simpleType>
-                </xs:element>
-                <xs:element name="id" type="xs:long">
-                    <xs:annotation>
-                        <xs:appinfo>
-                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
-                        </xs:appinfo>
-                    </xs:annotation>
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
