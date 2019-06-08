@@ -3,7 +3,8 @@
     targetNamespace="https://github.com/mare11/XML_MegaTravel/user"
     xmlns:user="https://github.com/mare11/XML_MegaTravel/user"
     xmlns:res="https://github.com/mare11/XML_MegaTravel/reservation"
-    xmlns:acm="https://github.com/mare11/XML_MegaTravel/accommodation">
+    xmlns:acm="https://github.com/mare11/XML_MegaTravel/accommodation"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0">
     <xs:import namespace="https://github.com/mare11/XML_MegaTravel/reservation"
         schemaLocation="Reservation.xsd"/>
     <xs:import namespace="https://github.com/mare11/XML_MegaTravel/accommodation"
@@ -56,7 +57,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="name">
+                <xs:element name="firstName">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:minLength value="1"/>
@@ -64,7 +65,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="lastname">
+                <xs:element name="lastName">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:minLength value="1"/>
@@ -82,12 +83,24 @@
                 </xs:element>
                 <xs:element name="bussinesID">
                     <xs:simpleType>
+                        <xs:annotation>
+                            <xs:appinfo>
+								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
+							</xs:appinfo>
+                        </xs:annotation>
                         <xs:restriction base="xs:int">
                             <xs:minInclusive value="0"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:Accommodation"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="accommodationId"
+                    type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -117,7 +130,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="name">
+                <xs:element name="firstName">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:minLength value="1"/>
@@ -125,7 +138,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="lastname">
+                <xs:element name="lastName">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:minLength value="1"/>
@@ -133,9 +146,27 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="enabled" type="xs:boolean" default="false"/>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="res:Reservation"/>
-                <xs:element default="false" name="deleted" type="xs:boolean"/>
+                <xs:element name="enabled" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
+						</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="reservationIds" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element default="false" name="deleted" type="xs:boolean">
+                    <xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
+						</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
