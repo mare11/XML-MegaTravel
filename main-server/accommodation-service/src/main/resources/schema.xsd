@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.xmlws.org/accommodationservice/gen"
+           targetNamespace="http://www.xmlws.org/accommodationservice/gen"
+           xmlns:acc="https://www.xmlws.org/accommodationservice/model" elementFormDefault="qualified">
+ 
+ 	<xs:import namespace="https://www.xmlws.org/accommodationservice/model"/>
+    <xs:element name="getAccommodationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+ 
+    <xs:element name="getAccommodationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="accommodation" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
