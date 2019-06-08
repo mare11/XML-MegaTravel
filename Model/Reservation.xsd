@@ -4,7 +4,8 @@
     xmlns:res="https://github.com/mare11/XML_MegaTravel/reservation"
     xmlns:acm="https://github.com/mare11/XML_MegaTravel/accommodation"
     xmlns:user="https://github.com/mare11/XML_MegaTravel/user"
-    xmlns:ag="https://github.com/mare11/XML_MegaTravel/agent">
+    xmlns:ag="https://github.com/mare11/XML_MegaTravel/agent"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0">
 
     <xs:import namespace="https://github.com/mare11/XML_MegaTravel/accommodation"
         schemaLocation="Accommodation.xsd"/>
@@ -12,11 +13,41 @@
     <xs:element name="Reservation">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="acm:Accommodation"/>
-                <xs:element ref="user:User"/>
-                <xs:element name="startDate" type="xs:date"/>
-                <xs:element name="endDate" type="xs:date"/>
-                <xs:element name="realized" type="xs:boolean"/>
+                <xs:element name="accommodationId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="userId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="startDate" type="xs:date">
+                    <xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.time.LocalDate" parseMethod="org.xmlws.util.TypeConverter.parseDate"/>
+						</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="endDate" type="xs:date">
+                    <xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.time.LocalDate" parseMethod="org.xmlws.util.TypeConverter.parseDate"/>
+						</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="realized" type="xs:boolean">
+                    <xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
+						</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element ref="res:ReservationRating"/>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="res:Message"/>
             </xs:sequence>
@@ -27,6 +58,11 @@
             <xs:sequence>
                 <xs:element name="rating">
                     <xs:simpleType>
+                        <xs:annotation>
+                            <xs:appinfo>
+								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
+							</xs:appinfo>
+                        </xs:annotation>
                         <xs:restriction base="xs:int">
                             <xs:minInclusive value="1"/>
                             <xs:maxInclusive value="5"/>
@@ -40,16 +76,26 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="timestamp" type="xs:dateTime"/>
-                <xs:element default="false" name="published" type="xs:boolean"/>
+                <xs:element name="timestamp" type="xs:dateTime">
+                    <xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.time.LocalDateTime" parseMethod="org.xmlws.util.TypeConverter.parseDateTime"/>
+						</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element default="false" name="published" type="xs:boolean">
+                    <xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
+						</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
     <xs:element name="Message">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="user:Agent"/>
-                <xs:element ref="user:User"/>
                 <xs:element name="content">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
@@ -57,9 +103,21 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="timestamp" type="xs:dateTime"/>
-                <xs:element default="true" name="direction" type="xs:boolean"/>
+                <xs:element name="timestamp" type="xs:dateTime">
+                    <xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.time.LocalDateTime" parseMethod="org.xmlws.util.TypeConverter.parseDateTime"/>
+						</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="direction" type="res:DirectionEnum"> </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+    <xs:simpleType name="DirectionEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="AGENT_TO_USER"/>
+            <xs:enumeration value="USER_TO_AGENT"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
