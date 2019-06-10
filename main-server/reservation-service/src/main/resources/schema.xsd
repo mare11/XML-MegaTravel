@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.xmlws.org/reservationservice/gen" elementFormDefault="qualified"
+           xmlns:res="https://github.com/mare11/XML_MegaTravel/reservation">
+
+    <xs:import namespace="https://github.com/mare11/XML_MegaTravel/reservation"
+               schemaLocation="Reservation.xsd"/>
+    <xs:element name="getReservationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getReservationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="res:Reservation"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
