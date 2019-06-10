@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.xmlws.dataservice.adapter.BooleanAdapter;
 import org.xmlws.dataservice.adapter.LongAdapter;
+import org.xmlws.dataservice.entity.Entity;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -91,7 +92,7 @@ import java.util.List;
 @XmlRootElement(name = "User")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends Entity {
 
     @XmlElement(required = true)
     protected String username;

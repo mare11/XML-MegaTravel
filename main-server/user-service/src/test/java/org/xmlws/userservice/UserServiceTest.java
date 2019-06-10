@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.xmlws.userservice.dto.UserDto;
 import org.xmlws.userservice.model.User;
+import org.xmlws.userservice.model.UserDto;
 import org.xmlws.userservice.repository.UserRepository;
 import org.xmlws.userservice.service.UserService;
 

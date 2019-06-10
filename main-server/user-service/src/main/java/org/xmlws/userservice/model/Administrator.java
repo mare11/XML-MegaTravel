@@ -8,6 +8,10 @@
 
 package org.xmlws.userservice.model;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.xmlws.dataservice.entity.Entity;
+
 import javax.xml.bind.annotation.*;
 
 
@@ -49,7 +53,9 @@ import javax.xml.bind.annotation.*;
         "password"
 })
 @XmlRootElement(name = "Administrator")
-public class Administrator {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Administrator extends Entity {
 
     @XmlElement(required = true)
     protected String username;
