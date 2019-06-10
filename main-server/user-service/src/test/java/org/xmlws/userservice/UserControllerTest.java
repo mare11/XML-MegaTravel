@@ -12,8 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.xmlws.userservice.controller.UserController;
-import org.xmlws.userservice.dto.UserDto;
 import org.xmlws.userservice.model.User;
+import org.xmlws.userservice.model.UserDto;
 import org.xmlws.userservice.service.UserService;
 
 import java.util.ArrayList;

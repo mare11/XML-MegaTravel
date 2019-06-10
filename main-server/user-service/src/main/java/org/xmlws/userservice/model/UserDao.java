@@ -1,4 +1,4 @@
-package org.xmlws.userservice.dto;
+package org.xmlws.userservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

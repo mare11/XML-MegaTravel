@@ -3,8 +3,8 @@ package org.xmlws.userservice.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xmlws.userservice.dto.UserDto;
 import org.xmlws.userservice.model.User;
+import org.xmlws.userservice.model.UserDto;
 import org.xmlws.userservice.repository.UserRepository;
 
 import java.util.ArrayList;
