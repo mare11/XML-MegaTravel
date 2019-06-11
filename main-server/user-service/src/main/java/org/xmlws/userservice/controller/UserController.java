@@ -34,4 +34,16 @@ public class UserController {
         UserDto user = this.userService.updateUser(userDto);
         return new ResponseEntity<UserDto>(user, HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{userId}/reservations/{reservationId}")
+    public ResponseEntity addReservation(@PathVariable Long userId, @PathVariable Long reservationId) {
+        userService.addReservation(userId, reservationId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}/reservations/{reservationId}")
+    public ResponseEntity cancelReservation(@PathVariable Long userId, @PathVariable Long reservationId) {
+        userService.cancelReservation(userId, reservationId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
