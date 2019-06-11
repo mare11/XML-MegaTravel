@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://www.xmlws.org/reservationservice/gen" elementFormDefault="qualified"
-           xmlns:res="https://github.com/mare11/XML_MegaTravel/reservation">
+    targetNamespace="http://www.xmlws.org/reservationservice/gen" elementFormDefault="qualified"
+    xmlns:res="https://github.com/mare11/XML_MegaTravel/reservation"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0">
 
     <xs:import namespace="https://github.com/mare11/XML_MegaTravel/reservation"
-               schemaLocation="Reservation.xsd"/>
-    <xs:element name="getReservationRequest">
+        schemaLocation="Reservation.xsd"/>
+
+    <xs:element name="getUserReservationRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="name" type="xs:string"/>
+                <xs:element name="userId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getAccReservationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="accommodationId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -16,8 +38,9 @@
     <xs:element name="getReservationResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="res:Reservation"/>
+                <xs:element ref="res:Reservation" maxOccurs="unbounded" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
 </xs:schema>

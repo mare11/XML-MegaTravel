@@ -13,8 +13,11 @@ public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
 
-    public Reservation findOne() {
-        List<Reservation> reservations = reservationRepository.findAll();
-        return reservations.get(0);
+    public List<Reservation> findReservationsByUser(Long userId) {
+        return reservationRepository.findWithFilter("[userId = '" + userId + "']");
+    }
+
+    public List<Reservation> findReservationsByAccommodation(Long accommodationId) {
+        return reservationRepository.findWithFilter("[accommodationId = '" + accommodationId + "']");
     }
 }
