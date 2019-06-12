@@ -20,6 +20,7 @@
 		<module>accommodation-service</module>
 		<module>authentication-service</module>
 		<module>discovery-service</module>
+		<module>exist-db-service</module>
 		<module>gateway-service</module>
 		<module>registration-service</module>
 		<module>reservation-service</module>
