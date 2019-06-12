@@ -5,10 +5,6 @@
     xmlns:res="https://github.com/mare11/XML_MegaTravel/reservation"
     xmlns:acm="https://github.com/mare11/XML_MegaTravel/accommodation"
     xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0">
-    <xs:import namespace="https://github.com/mare11/XML_MegaTravel/reservation"
-        schemaLocation="Reservation.xsd"/>
-    <xs:import namespace="https://github.com/mare11/XML_MegaTravel/accommodation"
-        schemaLocation="Accommodation.xsd"/>
     <xs:element name="Administrator">
         <xs:complexType>
             <xs:sequence>
@@ -28,6 +24,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
+                <xs:element maxOccurs="unbounded" ref="user:Authority"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -101,6 +98,7 @@
                         </xs:appinfo>
                     </xs:annotation>
                 </xs:element>
+                <xs:element maxOccurs="unbounded" ref="user:Authority"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -167,6 +165,14 @@
 						</xs:appinfo>
                     </xs:annotation>
                 </xs:element>
+                <xs:element maxOccurs="unbounded" ref="user:Authority"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Authority">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="role" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

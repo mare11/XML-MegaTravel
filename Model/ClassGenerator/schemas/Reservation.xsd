@@ -6,10 +6,6 @@
     xmlns:user="https://github.com/mare11/XML_MegaTravel/user"
     xmlns:ag="https://github.com/mare11/XML_MegaTravel/agent"
     xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0">
-
-    <xs:import namespace="https://github.com/mare11/XML_MegaTravel/accommodation"
-        schemaLocation="Accommodation.xsd"/>
-    <xs:import namespace="https://github.com/mare11/XML_MegaTravel/user" schemaLocation="Users.xsd"/>
     <xs:element name="Reservation">
         <xs:complexType>
             <xs:sequence>
@@ -111,6 +107,7 @@
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="direction" type="res:DirectionEnum"> </xs:element>
+                <xs:element name="seen" type="xs:boolean"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
