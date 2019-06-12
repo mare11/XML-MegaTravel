@@ -3,6 +3,7 @@ package org.xmlws.userservice.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xmlws.userservice.exceptions.UserNotFoundException;
 import org.xmlws.userservice.model.User;
 import org.xmlws.userservice.model.UserDto;
 import org.xmlws.userservice.repository.UserRepository;
@@ -30,12 +31,12 @@ public class UserService {
     }
 
     public UserDto findOneUser(String username) {
-        User user = userRepository.findWithFilter("[username = '" + username + "']").get(0);
+        User user = getUser(username);
         return mapper.map(user, UserDto.class);
     }
 
     public UserDto updateUser(UserDto userDto) {
-        User user = userRepository.findWithFilter("[username = '" + userDto.getUsername() + "']").get(0);
+        User user = getUser(userDto.getUsername());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user = userRepository.save(user);
@@ -43,6 +44,28 @@ public class UserService {
 
     }
 
+    public UserDto enableUser(UserDto userDto) {
+        User user = getUser(userDto.getUsername());
+        user.setEnabled(true);
+        user = userRepository.save(user);
+        return mapper.map(user, UserDto.class);
+    }
+
+    public UserDto disableUser(UserDto userDto) {
+        User user = getUser(userDto.getUsername());
+        user.setEnabled(false);
+        user = userRepository.save(user);
+        return mapper.map(user, UserDto.class);
+    }
+
+    public UserDto deleteUser(UserDto userDto) {
+        User user = getUser(userDto.getUsername());
+        user.setDeleted(true);
+        user = userRepository.save(user);
+        return mapper.map(user, UserDto.class);
+    }
+
+    //    ADD USER EXISTING CHECK FOR THESE 2 WITH USER ID
     public void addReservation(Long userId, Long reservationId) {
         User user = userRepository.findWithFilter("[id = '" + userId + "']").get(0);
         user.getReservationIds().add(reservationId);
@@ -54,5 +77,13 @@ public class UserService {
         user.getReservationIds().remove(reservationId);
         userRepository.save(user);
     }
+    //
 
+    private User getUser(String username) {
+        List<User> users = userRepository.findWithFilter("[username = '" + username + "']");
+        if (users.isEmpty()) {
+            throw new UserNotFoundException(username);
+        }
+        return users.get(0);
+    }
 }

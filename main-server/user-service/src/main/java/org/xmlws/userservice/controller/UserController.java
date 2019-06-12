@@ -20,19 +20,19 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = this.userService.findAllUsers();
-        return new ResponseEntity<List<UserDto>>(users, HttpStatus.OK);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getOneUser(@PathVariable String username) {
         UserDto user = this.userService.findOneUser(username);
-        return new ResponseEntity<UserDto>(user, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         UserDto user = this.userService.updateUser(userDto);
-        return new ResponseEntity<UserDto>(user, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{userId}/reservations/{reservationId}")
