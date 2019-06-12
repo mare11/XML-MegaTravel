@@ -46,5 +46,4 @@ public class UserController {
         userService.cancelReservation(userId, reservationId);
         return new ResponseEntity(HttpStatus.OK);
     }
-
 }
