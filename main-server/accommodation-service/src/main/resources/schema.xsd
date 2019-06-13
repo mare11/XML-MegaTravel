@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.xmlws.org/accommodationservice/gen"
-           targetNamespace="http://www.xmlws.org/accommodationservice/gen"
-           xmlns:acc="https://www.xmlws.org/accommodationservice/model" elementFormDefault="qualified">
- 
- 	<xs:import namespace="https://www.xmlws.org/accommodationservice/model"/>
+           targetNamespace="http://www.xmlws.org/accommodationservice/gen" 
+           xmlns:acm="https://github.com/mare11/XML_MegaTravel/accommodation" 
+           xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0" elementFormDefault="qualified">
+ 	
+ 	<xs:import namespace="https://github.com/mare11/XML_MegaTravel/accommodation" schemaLocation="Accommodation.xsd"/>
     <xs:element name="getAccommodationRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="name" type="xs:string"/>
+                <xs:element name="id" type="xs:long">
+                	<xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                 </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -15,7 +22,67 @@
     <xs:element name="getAccommodationResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="accommodation" type="xs:string"/>
+                <xs:element ref="acm:Accommodation"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="addAccommodationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="acm:Accommodation"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="addAccommodationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="acm:Accommodation"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="updateAccommodationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="acm:Accommodation"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="updateAccommodationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="acm:Accommodation"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="deleteAccommodationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long">
+                	<xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                 </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="deleteAccommodationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="flag" type="xs:boolean">
+                	<xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
+						</xs:appinfo>
+                    </xs:annotation>
+               	</xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
