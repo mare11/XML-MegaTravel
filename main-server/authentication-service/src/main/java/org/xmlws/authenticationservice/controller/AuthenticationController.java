@@ -13,7 +13,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,9 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.xmlws.authenticationservice.security.AuthenticationRequest;
 import org.xmlws.authenticationservice.security.TokenUtility;
 import org.xmlws.authenticationservice.security.UserState;
+import org.xmlws.authenticationservice.service.UserService;
 
 @RestController
+@RequestMapping(value = "/authentication")
 public class AuthenticationController {
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private TokenUtility tokenUtility;
@@ -31,6 +39,26 @@ public class AuthenticationController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	@RequestMapping(value = "/{token}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public UserState validateToken(@PathVariable String token) 
+			throws Exception {
+		
+		String username = tokenUtility.getUsernameFromToken(token);
+		User user = (User) this.userService.loadUserByUsername(username);
+		
+		if (user == null) {
+			return null;
+		}
+		
+		List<String> authorities = tokenUtility.getAuthoritiesFromToken(token);
+		if (!authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+				.containsAll(user.getAuthorities().stream().collect(Collectors.toList()))) {
+			return null;
+		}
+		
+		return new UserState(token, username, authorities);
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserState> authenticateUser(@RequestBody AuthenticationRequest authenticationRequest) 
 			throws AuthenticationException, IOException {
@@ -52,5 +80,15 @@ public class AuthenticationController {
 		//Return token, username and authorities to client side
 		UserState userState = new UserState(token, username, authorities);
 		return new ResponseEntity<UserState>(userState, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "token/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String generateToken(@PathVariable String username) {
+		
+		return this.tokenUtility.generateToken(username, this.userService.loadUserByUsername(username)
+																		 .getAuthorities()
+																		 .stream()
+																		 .map(GrantedAuthority::getAuthority)
+																		 .collect(Collectors.toList()));
 	}
 }

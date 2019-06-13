@@ -33,6 +33,11 @@ public class UserService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		if (username == null) {
+			return null;
+		}
+		
 		User user = (User) loadUser(this.userRepository, username);	
 		if (user != null) {
 			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", user.getAuthority().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())));
@@ -56,6 +61,7 @@ public class UserService implements UserDetailsService {
 	}
 	
 	private Entity loadUser(ExistXQJRepository<?> repository, String username) {
+		
 		List<?> entities = repository.findWithFilter("[username='" + username + "']");
 		if (!entities.isEmpty()) {
 			 return (Entity) entities.get(0);

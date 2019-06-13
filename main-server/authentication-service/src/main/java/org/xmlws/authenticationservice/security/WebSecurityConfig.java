@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 					))
 			.and()
 			.authorizeRequests()
-			.antMatchers(HttpMethod.POST, tokenUtility.getAuthPath()).permitAll()
+			.antMatchers(tokenUtility.getAuthPath()).permitAll()
 			.anyRequest().authenticated();
 	}
 

@@ -16,6 +16,9 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 
 /**
  * <p>Java class for anonymous complex type.
@@ -41,6 +44,8 @@ import org.springframework.security.core.GrantedAuthority;
     "role"
 })
 @XmlRootElement(name = "Authority")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Authority implements GrantedAuthority {
 
 	private static final long serialVersionUID = -1530908191662496261L;
