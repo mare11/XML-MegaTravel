@@ -23,6 +23,19 @@ services:
     links:
       - discovery:discovery
 
+  exist-db-service:
+    image: exist-db-service
+    container_name: exist-db-service
+    build:
+      context: ./exist-db-service
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+    depends_on:
+      - discovery
+    links:
+      - discovery:discovery
+
   accommodation-service:
     image: accommodation-service
     build:
@@ -32,8 +45,10 @@ services:
       - "2222"
     depends_on:
       - discovery
+      - exist-db-service
     links:
       - discovery:discovery
+      - exist-db-service:exist-db-service
 
   authentication-service:
     image: authentication-service
@@ -44,8 +59,11 @@ services:
       - "2222"
     depends_on:
       - discovery
+
+      - exist-db-service
     links:
       - discovery:discovery
+      - exist-db-service:exist-db-service
       
   registration-service:
     image: registration-service
@@ -56,8 +74,10 @@ services:
       - "2222"
     depends_on:
       - discovery
+      - exist-db-service
     links:
       - discovery:discovery
+      - exist-db-service:exist-db-service
  
   reservation-service:
     image: reservation-service
@@ -68,8 +88,10 @@ services:
       - "2222"
     depends_on:
       - discovery
+      - exist-db-service
     links:
-      - discovery:discovery    
+      - discovery:discovery
+      - exist-db-service:exist-db-service
 
   search-service:
     image: search-service
@@ -80,8 +102,10 @@ services:
       - "2222"
     depends_on:
       - discovery
+      - exist-db-service
     links:
-      - discovery:discovery     
+      - discovery:discovery
+      - exist-db-service:exist-db-service
 
   user-service:
     image: user-service
@@ -92,5 +116,7 @@ services:
       - "2222"
     depends_on:
       - discovery
+      - exist-db-service
     links:
-      - discovery:discovery  
+      - discovery:discovery
+      - exist-db-service:exist-db-service
