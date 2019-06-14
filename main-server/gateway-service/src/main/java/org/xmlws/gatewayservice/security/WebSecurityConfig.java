@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @EnableWebSecurity
@@ -18,6 +19,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private TokenUtility tokenUtility;
+	
+	@Autowired
+    private WebClient.Builder webClientBuilder;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -30,10 +34,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					))
 			.and()
 			//Intercept every request to validate token
-			.addFilterAfter(new JwtAuthenticationFilter(tokenUtility), UsernamePasswordAuthenticationFilter.class)
+			.addFilterAfter(new JwtAuthenticationFilter(tokenUtility, webClientBuilder), UsernamePasswordAuthenticationFilter.class)
 			.authorizeRequests()
 			//Allow anyone to access authentication endpoint
-			.antMatchers(HttpMethod.POST, tokenUtility.getAuthPath()).permitAll()
+			.antMatchers(tokenUtility.getAuthPath()).permitAll()
 			//Test if endpoint /admin/role/required/test is authorized correctly
 			.antMatchers("/admin/role/required/test/**").hasAuthority("ROLE_ADMIN")
 			.anyRequest().authenticated();

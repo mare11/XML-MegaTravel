@@ -19,7 +19,7 @@ public class ExistWarConfiguration {
 	    	
 	    	@Override
 	    	protected TomcatWebServer getTomcatWebServer(Tomcat tomcat) {
-	    		new File(tomcat.getServer().getCatalinaBase(), "webapps");
+	    		new File(tomcat.getServer().getCatalinaBase(), "webapps").mkdir();
     			try {
     				tomcat.addWebapp("/exist", new ClassPathResource("exist.war").getFile().toString());
     			} catch (Exception ex) {
