@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
+import org.xmlws.accommodationservice.exceptions.LocationNotFoundException;
 import org.xmlws.accommodationservice.model.Location;
 import org.xmlws.accommodationservice.repository.LocationRepository;
 import org.xmlws.dataservice.catalog.CatalogRepository;
@@ -20,7 +21,7 @@ public class LocationService {
 	private CatalogRepository catalogRepository;
 	
 	public Location findOne(Long id){
-		return locationRepository.findOne(id.toString());
+		return getLocation(id);
 	}
 	
 	public List<Location> findAll() {
@@ -34,7 +35,7 @@ public class LocationService {
 	}
 	
 	public void delete(Long id) throws NotFoundException{
-		Location location = locationRepository.findOne(id.toString());
+		Location location = getLocation(id);
 		if(location == null){
 			throw new NotFoundException();
 		}else{
@@ -49,5 +50,13 @@ public class LocationService {
 		}else{
 			return locations.get(0);
 		}
+	}
+	
+	public Location getLocation(Long id){
+		List<Location> locations = locationRepository.findWithFilter("[id='" + id + "']");
+		if (locations.isEmpty()) {
+            throw new LocationNotFoundException(id);
+        }
+        return locations.get(0);
 	}
 }

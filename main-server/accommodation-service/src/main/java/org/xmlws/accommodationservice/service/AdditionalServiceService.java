@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
+import org.xmlws.accommodationservice.exceptions.AdditionalServiceNotFoundException;
 import org.xmlws.accommodationservice.model.AdditionalService;
 import org.xmlws.accommodationservice.repository.AdditionalServiceRepository;
 import org.xmlws.dataservice.catalog.CatalogRepository;
@@ -19,7 +20,7 @@ public class AdditionalServiceService {
 	private CatalogRepository catalogRepository;
 
 	public AdditionalService findOne(Long id) {
-		return additionalServiceRepository.findOne(id.toString());
+		return getAdditionalService(id);
 	}
 
 	public List<AdditionalService> findAll() {
@@ -33,11 +34,15 @@ public class AdditionalServiceService {
 	}
 
 	public void delete(Long id) throws NotFoundException {
-		AdditionalService additionalService = additionalServiceRepository.findOne(id.toString());
-		if (additionalService == null) {
-			throw new NotFoundException();
-		} else {
-			additionalServiceRepository.delete(additionalService);
-		}
+		AdditionalService additionalService = getAdditionalService(id);
+		additionalServiceRepository.delete(additionalService);
+	}
+	
+	public AdditionalService getAdditionalService(Long id){
+		List<AdditionalService> additionalServices = additionalServiceRepository.findWithFilter("[id='" + id + "']");
+		if (additionalServices.isEmpty()) {
+            throw new AdditionalServiceNotFoundException(id);
+        }
+        return additionalServices.get(0);
 	}
 }

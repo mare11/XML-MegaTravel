@@ -22,7 +22,7 @@
     <xs:element name="getAccommodationResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="acm:Accommodation"/>
+                <xs:element ref="tns:AccommodationDTO"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -30,7 +30,7 @@
     <xs:element name="addAccommodationRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="acm:Accommodation"/>
+                <xs:element ref="tns:AccommodationDTO"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -38,7 +38,7 @@
     <xs:element name="addAccommodationResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="acm:Accommodation"/>
+                <xs:element ref="tns:AccommodationDTO"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -46,7 +46,7 @@
     <xs:element name="updateAccommodationRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="acm:Accommodation"/>
+                <xs:element ref="tns:AccommodationDTO"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -54,7 +54,7 @@
     <xs:element name="updateAccommodationResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="acm:Accommodation"/>
+                <xs:element ref="tns:AccommodationDTO"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -83,6 +83,95 @@
 						</xs:appinfo>
                     </xs:annotation>
                	</xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="AccommodationDTO">
+    	<xs:complexType>
+            <xs:sequence>
+            	<xs:element name="id" type="xs:long">
+            		<xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+            	</xs:element>
+                <xs:element ref="acm:AccommodationType"/>
+                <xs:element name="category">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:appinfo>
+								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
+							</xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:int">
+                            <xs:minInclusive value="0"/>
+                            <xs:maxInclusive value="5"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:AdditionalService"/>
+                <xs:element name="freeCancellation" type="xs:boolean">
+                    <xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
+						</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="cancellationDays">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:appinfo>
+								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
+							</xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:int">
+                            <xs:totalDigits value="2"/>
+                            <xs:minInclusive value="0"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element minOccurs="1" name="cancellationPrice" type="acm:TPrice"/>
+                <xs:element name="description">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="200"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="1" name="images" type="xs:string"> </xs:element>
+                <xs:element name="numberOfPersons">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:appinfo>
+								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
+							</xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:int">
+                            <xs:totalDigits value="2"/>
+                            <xs:minInclusive value="0"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="agentId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="defaultPrice" type="acm:TPrice"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:PeriodPrice"/>
+                <xs:element ref="acm:Location"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:Unavailability"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="reservationIds" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
