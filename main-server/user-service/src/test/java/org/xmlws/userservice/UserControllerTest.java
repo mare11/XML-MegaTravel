@@ -46,8 +46,8 @@ public class UserControllerTest {
 
     @Before
     public void init() {
-        user1 = new User("joca", "123", "jovan@gmail.com", "Jovan", "Jovanovic", true, new ArrayList<>(), false);
-        user2 = new User("iva", "123", "ivan@gmail.com", "Ivan", "Ivanovic", true, new ArrayList<>(), false);
+        user1 = new User("joca", "123", "jovan@gmail.com", "Jovan", "Jovanovic", true, new ArrayList<>(), false, new ArrayList<>());
+        user2 = new User("iva", "123", "ivan@gmail.com", "Ivan", "Ivanovic", true, new ArrayList<>(), false, new ArrayList<>());
     }
 
     @Test

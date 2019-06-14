@@ -67,13 +67,21 @@ public class UserService {
 
     //    ADD USER EXISTING CHECK FOR THESE 2 WITH USER ID
     public void addReservation(Long userId, Long reservationId) {
-        User user = userRepository.findWithFilter("[id = '" + userId + "']").get(0);
+        List<User> users = userRepository.findWithFilter("[id = '" + userId + "']");
+        if (users.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        User user = users.get(0);
         user.getReservationIds().add(reservationId);
         userRepository.save(user);
     }
 
     public void cancelReservation(Long userId, Long reservationId) {
-        User user = userRepository.findWithFilter("[id = '" + userId + "']").get(0);
+        List<User> users = userRepository.findWithFilter("[id = '" + userId + "']");
+        if (users.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        User user = users.get(0);
         user.getReservationIds().remove(reservationId);
         userRepository.save(user);
     }
