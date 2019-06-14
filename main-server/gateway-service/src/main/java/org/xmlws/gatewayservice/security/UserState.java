@@ -1,4 +1,4 @@
-package org.xmlws.authenticationservice.security;
+package org.xmlws.gatewayservice.security;
 
 import java.util.List;
 

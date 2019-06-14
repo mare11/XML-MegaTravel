@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
@@ -19,12 +20,6 @@ public class TokenUtility {
 	
 	@Value("/authentication/**")
     private String authPath;
-
-	@Value("Authorization")
-	private String authHeader;
-	
-	@Value("Bearer ")
-	private String authPrefix;
 
 	@Value("JwtSecretKey")
 	private String secret;
@@ -45,5 +40,23 @@ public class TokenUtility {
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + expiresIn * 1000))
 				.signWith(SIGNATURE_ALGORITHM, secret).compact();
+	}
+	
+	private Claims getClaimsFromToken(String token) throws Exception {
+		return Jwts.parser()
+				   .setSigningKey(secret)
+				   .parseClaimsJws(token)
+				   .getBody();
+	}
+
+	public String getUsernameFromToken(String token) throws Exception {	
+		Claims claims = this.getClaimsFromToken(token);
+		return claims.getSubject();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> getAuthoritiesFromToken(String token) throws Exception {
+		Claims claims = this.getClaimsFromToken(token);
+		return (List<String>) claims.get(authoritiesClaim);
 	}
 }

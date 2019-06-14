@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.xmlws.dataservice.adapter.BooleanAdapter;
+import org.xmlws.dataservice.adapter.IntegerAdapter;
 import org.xmlws.dataservice.adapter.LongAdapter;
 import org.xmlws.dataservice.entity.Entity;
 
@@ -37,8 +37,8 @@ import org.xmlws.dataservice.entity.Entity;
  *         &lt;element name="username">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *               &lt;minLength value="4"/>
- *               &lt;maxLength value="16"/>
+ *               &lt;minLength value="6"/>
+ *               &lt;maxLength value="20"/>
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
@@ -46,7 +46,7 @@ import org.xmlws.dataservice.entity.Entity;
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *               &lt;minLength value="6"/>
- *               &lt;maxLength value="20"/>
+ *               &lt;maxLength value="16"/>
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
@@ -73,9 +73,22 @@ import org.xmlws.dataservice.entity.Entity;
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element name="enabled" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="reservationIds" type="{http://www.w3.org/2001/XMLSchema}long" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="deleted" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="adress">
+ *           &lt;simpleType>
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *               &lt;minLength value="1"/>
+ *               &lt;maxLength value="50"/>
+ *             &lt;/restriction>
+ *           &lt;/simpleType>
+ *         &lt;/element>
+ *         &lt;element name="bussinesID">
+ *           &lt;simpleType>
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}int">
+ *               &lt;minInclusive value="0"/>
+ *             &lt;/restriction>
+ *           &lt;/simpleType>
+ *         &lt;/element>
+ *         &lt;element name="accommodationId" type="{http://www.w3.org/2001/XMLSchema}long" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element ref="{https://github.com/mare11/XML_MegaTravel/user}Authority" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -92,13 +105,13 @@ import org.xmlws.dataservice.entity.Entity;
     "email",
     "firstName",
     "lastName",
-    "enabled",
-    "reservationIds",
-    "deleted",
+    "adress",
+    "bussinesID",
+    "accommodationId",
     "authority"
 })
-@XmlRootElement(name = "User")
-public class User extends Entity {
+@XmlRootElement(name = "Agent")
+public class Agent extends Entity {
 
     @XmlElement(required = true)
     protected String username;
@@ -110,18 +123,15 @@ public class User extends Entity {
     protected String firstName;
     @XmlElement(required = true)
     protected String lastName;
-    @XmlElement(required = true, type = String.class, defaultValue = "false")
-    @XmlJavaTypeAdapter(BooleanAdapter.class)
-    @XmlSchemaType(name = "boolean")
-    protected Boolean enabled;
+    @XmlElement(required = true)
+    protected String adress;
+    @XmlElement(required = true, type = String.class)
+    @XmlJavaTypeAdapter(IntegerAdapter.class)
+    protected Integer bussinesID;
     @XmlElement(type = String.class)
     @XmlJavaTypeAdapter(LongAdapter.class)
     @XmlSchemaType(name = "long")
-    protected List<Long> reservationIds;
-    @XmlElement(required = true, type = String.class, defaultValue = "false")
-    @XmlJavaTypeAdapter(BooleanAdapter.class)
-    @XmlSchemaType(name = "boolean")
-    protected Boolean deleted;
+    protected List<Long> accommodationId;
     @XmlElement(name = "Authority", required = true)
     protected List<Authority> authority;
 
@@ -246,42 +256,66 @@ public class User extends Entity {
     }
 
     /**
-     * Gets the value of the enabled property.
+     * Gets the value of the adress property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public Boolean isEnabled() {
-        return enabled;
+    public String getAdress() {
+        return adress;
     }
 
     /**
-     * Sets the value of the enabled property.
+     * Sets the value of the adress property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setEnabled(Boolean value) {
-        this.enabled = value;
+    public void setAdress(String value) {
+        this.adress = value;
     }
 
     /**
-     * Gets the value of the reservationIds property.
+     * Gets the value of the bussinesID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public Integer getBussinesID() {
+        return bussinesID;
+    }
+
+    /**
+     * Sets the value of the bussinesID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setBussinesID(Integer value) {
+        this.bussinesID = value;
+    }
+
+    /**
+     * Gets the value of the accommodationId property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the reservationIds property.
+     * This is why there is not a <CODE>set</CODE> method for the accommodationId property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getReservationIds().add(newItem);
+     *    getAccommodationId().add(newItem);
      * </pre>
      * 
      * 
@@ -291,35 +325,11 @@ public class User extends Entity {
      * 
      * 
      */
-    public List<Long> getReservationIds() {
-        if (reservationIds == null) {
-            reservationIds = new ArrayList<Long>();
+    public List<Long> getAccommodationId() {
+        if (accommodationId == null) {
+            accommodationId = new ArrayList<Long>();
         }
-        return this.reservationIds;
-    }
-
-    /**
-     * Gets the value of the deleted property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public Boolean isDeleted() {
-        return deleted;
-    }
-
-    /**
-     * Sets the value of the deleted property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDeleted(Boolean value) {
-        this.deleted = value;
+        return this.accommodationId;
     }
 
     /**
