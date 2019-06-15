@@ -3,7 +3,6 @@ package org.xmlws.accommodationservice.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +34,7 @@ public class AccommodationTypeController {
 
 	@RequestMapping(method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> deleteAccommodationType(@RequestBody AccommodationType accommodationType) {
-		try {
-			accommodationTypeService.delete(accommodationType.getId());
-		} catch (NotFoundException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		accommodationTypeService.delete(accommodationType.getId());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

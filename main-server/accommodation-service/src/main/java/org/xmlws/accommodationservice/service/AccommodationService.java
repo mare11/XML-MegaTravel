@@ -6,9 +6,8 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
-import org.xmlws.accommodationservice.exceptions.AccommodationException;
+import org.xmlws.accommodationservice.exceptions.AccommodationNotFoundException;
 import org.xmlws.accommodationservice.gen.AccommodationDTO;
 import org.xmlws.accommodationservice.model.Accommodation;
 import org.xmlws.accommodationservice.model.AdditionalService;
@@ -82,7 +81,7 @@ public class AccommodationService {
 		return accommodationDTO;
 	}
 
-	public AccommodationDTO update(AccommodationDTO accommodationDTO) throws NotFoundException {
+	public AccommodationDTO update(AccommodationDTO accommodationDTO) {
 		Accommodation accommodation = getAccommodation(accommodationDTO.getId());
 		accommodation = mapper.map(accommodationDTO, Accommodation.class);
 		accommodation.setAccommodationTypeId(accommodationDTO.getAccommodationType().getId());
@@ -124,7 +123,7 @@ public class AccommodationService {
 	public Accommodation getAccommodation(Long id) {
 		List<Accommodation> accommodations = accommodationRepository.findWithFilter("[id='" + id + "']");
 		if (accommodations.isEmpty()) {
-			throw new AccommodationException(id);
+			throw new AccommodationNotFoundException(id);
 		}
 		return accommodations.get(0);
 	}

@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class AccommodationException extends RuntimeException {
+public class AccommodationNotFoundException extends RuntimeException {
 	
-	    public AccommodationException(Long id) {
+	    public AccommodationNotFoundException(Long id) {
 	        super("Accommodation with id '" + id + "' does not exist!"); 
 	    }
 }

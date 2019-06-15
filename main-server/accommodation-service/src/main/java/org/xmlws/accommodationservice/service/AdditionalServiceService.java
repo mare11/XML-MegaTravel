@@ -3,7 +3,6 @@ package org.xmlws.accommodationservice.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.xmlws.accommodationservice.exceptions.AdditionalServiceNotFoundException;
 import org.xmlws.accommodationservice.model.AdditionalService;
@@ -33,12 +32,12 @@ public class AdditionalServiceService {
 		return additionalServiceRepository.save(additionalService);
 	}
 
-	public void delete(Long id) throws NotFoundException {
+	public void delete(Long id) {
 		AdditionalService additionalService = getAdditionalService(id);
 		additionalServiceRepository.delete(additionalService);
 	}
 	
-	public AdditionalService getAdditionalService(Long id){
+	private AdditionalService getAdditionalService(Long id){
 		List<AdditionalService> additionalServices = additionalServiceRepository.findWithFilter("[id='" + id + "']");
 		if (additionalServices.isEmpty()) {
             throw new AdditionalServiceNotFoundException(id);

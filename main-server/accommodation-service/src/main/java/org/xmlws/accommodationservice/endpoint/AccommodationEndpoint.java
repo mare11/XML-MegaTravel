@@ -1,7 +1,6 @@
 package org.xmlws.accommodationservice.endpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -46,11 +45,7 @@ public class AccommodationEndpoint {
 	public UpdateAccommodationResponse updateAccommodation(@RequestPayload UpdateAccommodationRequest request) {
 		UpdateAccommodationResponse response = new UpdateAccommodationResponse();
 		AccommodationDTO accommodationDTO = null;
-		try {
-			accommodationDTO = accommodationService.update(request.getAccommodationDTO());
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-		}
+		accommodationDTO = accommodationService.update(request.getAccommodationDTO());
 		response.setAccommodationDTO(accommodationDTO);
 		return response;
 	}
