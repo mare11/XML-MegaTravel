@@ -14,7 +14,9 @@ import org.xmlws.accommodationservice.gen.DeleteAccommodationRequest;
 import org.xmlws.accommodationservice.gen.DeleteAccommodationResponse;
 import org.xmlws.accommodationservice.gen.GetAccommodationRequest;
 import org.xmlws.accommodationservice.gen.GetAccommodationResponse;
+import org.xmlws.accommodationservice.gen.GetAccommodationTypesRequest;
 import org.xmlws.accommodationservice.gen.GetAccommodationTypesResponse;
+import org.xmlws.accommodationservice.gen.GetAdditionalServicesRequest;
 import org.xmlws.accommodationservice.gen.GetAdditionalServicesResponse;
 import org.xmlws.accommodationservice.gen.UpdateAccommodationRequest;
 import org.xmlws.accommodationservice.gen.UpdateAccommodationResponse;
@@ -74,7 +76,7 @@ public class AccommodationEndpoint {
 	
 	@PayloadRoot(localPart = "getAccommodationTypesRequest")
 	@ResponsePayload
-	public GetAccommodationTypesResponse getAccommodationTypes(){
+	public GetAccommodationTypesResponse getAccommodationTypes(@RequestPayload GetAccommodationTypesRequest request){
 		GetAccommodationTypesResponse response = new GetAccommodationTypesResponse();
 		List<AccommodationType> accommodationTypes = accommodationTypeService.findAll();
 		response.getAccommodationType().addAll(accommodationTypes);
@@ -83,7 +85,7 @@ public class AccommodationEndpoint {
 	
 	@PayloadRoot(localPart = "getAdditionalServicesRequest")
 	@ResponsePayload
-	public GetAdditionalServicesResponse getAdditionalServices(){
+	public GetAdditionalServicesResponse getAdditionalServices(@RequestPayload GetAdditionalServicesRequest request){
 		GetAdditionalServicesResponse response = new GetAdditionalServicesResponse();
 		List<AdditionalService> additionalServices = additionalServiceService.findAll();
 		response.getAdditionalService().addAll(additionalServices);
