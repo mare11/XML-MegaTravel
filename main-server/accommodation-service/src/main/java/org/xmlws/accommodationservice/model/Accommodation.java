@@ -11,6 +11,7 @@ package org.xmlws.accommodationservice.model;
 import org.xmlws.dataservice.adapter.BooleanAdapter;
 import org.xmlws.dataservice.adapter.IntegerAdapter;
 import org.xmlws.dataservice.adapter.LongAdapter;
+import org.xmlws.dataservice.entity.Entity;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -96,7 +97,7 @@ import java.util.List;
         "reservationIds"
 })
 @XmlRootElement(name = "Accommodation")
-public class Accommodation {
+public class Accommodation extends Entity{
 
     @XmlElement(required = true, type = String.class)
     @XmlJavaTypeAdapter(LongAdapter.class)
