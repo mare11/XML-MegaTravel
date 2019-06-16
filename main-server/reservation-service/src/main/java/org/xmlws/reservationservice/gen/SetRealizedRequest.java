@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="accommodationId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="reservationId" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,34 +33,34 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-        "accommodationId"
+        "reservationId"
 })
-@XmlRootElement(name = "getReservationRequest")
-public class GetReservationRequest {
+@XmlRootElement(name = "setRealizedRequest")
+public class SetRealizedRequest {
 
     @XmlElement(required = true, type = String.class)
     @XmlJavaTypeAdapter(LongAdapter.class)
     @XmlSchemaType(name = "long")
-    protected Long accommodationId;
+    protected Long reservationId;
 
     /**
-     * Gets the value of the accommodationId property.
+     * Gets the value of the reservationId property.
      *
      * @return possible object is
      * {@link String }
      */
-    public Long getAccommodationId() {
-        return accommodationId;
+    public Long getReservationId() {
+        return reservationId;
     }
 
     /**
-     * Sets the value of the accommodationId property.
+     * Sets the value of the reservationId property.
      *
      * @param value allowed object is
      *              {@link String }
      */
-    public void setAccommodationId(Long value) {
-        this.accommodationId = value;
+    public void setReservationId(Long value) {
+        this.reservationId = value;
     }
 
 }

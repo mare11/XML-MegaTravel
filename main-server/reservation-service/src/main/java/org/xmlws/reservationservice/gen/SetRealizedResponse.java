@@ -8,10 +8,9 @@
 
 package org.xmlws.reservationservice.gen;
 
-import org.xmlws.dataservice.adapter.LongAdapter;
+import org.xmlws.reservationservice.model.Reservation;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -24,7 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="accommodationId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element ref="{https://github.com/mare11/XML_MegaTravel/reservation}Reservation"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,34 +32,32 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-        "accommodationId"
+        "reservation"
 })
-@XmlRootElement(name = "getReservationRequest")
-public class GetReservationRequest {
+@XmlRootElement(name = "setRealizedResponse")
+public class SetRealizedResponse {
 
-    @XmlElement(required = true, type = String.class)
-    @XmlJavaTypeAdapter(LongAdapter.class)
-    @XmlSchemaType(name = "long")
-    protected Long accommodationId;
+    @XmlElement(name = "Reservation", required = true)
+    protected Reservation reservation;
 
     /**
-     * Gets the value of the accommodationId property.
+     * Gets the value of the reservation property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link Reservation }
      */
-    public Long getAccommodationId() {
-        return accommodationId;
+    public Reservation getReservation() {
+        return reservation;
     }
 
     /**
-     * Sets the value of the accommodationId property.
+     * Sets the value of the reservation property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link Reservation }
      */
-    public void setAccommodationId(Long value) {
-        this.accommodationId = value;
+    public void setReservation(Reservation value) {
+        this.reservation = value;
     }
 
 }

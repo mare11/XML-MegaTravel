@@ -9,6 +9,7 @@
 package org.xmlws.reservationservice.gen;
 
 import org.xmlws.dataservice.adapter.LongAdapter;
+import org.xmlws.reservationservice.model.Message;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -24,7 +25,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="accommodationId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="reservationId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element ref="{https://github.com/mare11/XML_MegaTravel/reservation}Message"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,34 +35,57 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-        "accommodationId"
+        "reservationId",
+        "message"
 })
-@XmlRootElement(name = "getReservationRequest")
-public class GetReservationRequest {
+@XmlRootElement(name = "addMessageRequest")
+public class AddMessageRequest {
 
     @XmlElement(required = true, type = String.class)
     @XmlJavaTypeAdapter(LongAdapter.class)
     @XmlSchemaType(name = "long")
-    protected Long accommodationId;
+    protected Long reservationId;
+    @XmlElement(name = "Message", required = true)
+    protected Message message;
 
     /**
-     * Gets the value of the accommodationId property.
+     * Gets the value of the reservationId property.
      *
      * @return possible object is
      * {@link String }
      */
-    public Long getAccommodationId() {
-        return accommodationId;
+    public Long getReservationId() {
+        return reservationId;
     }
 
     /**
-     * Sets the value of the accommodationId property.
+     * Sets the value of the reservationId property.
      *
      * @param value allowed object is
      *              {@link String }
      */
-    public void setAccommodationId(Long value) {
-        this.accommodationId = value;
+    public void setReservationId(Long value) {
+        this.reservationId = value;
+    }
+
+    /**
+     * Gets the value of the message property.
+     *
+     * @return possible object is
+     * {@link Message }
+     */
+    public Message getMessage() {
+        return message;
+    }
+
+    /**
+     * Sets the value of the message property.
+     *
+     * @param value allowed object is
+     *              {@link Message }
+     */
+    public void setMessage(Message value) {
+        this.message = value;
     }
 
 }

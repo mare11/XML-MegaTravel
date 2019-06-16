@@ -113,11 +113,17 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
+    public Reservation setRealized(Long id) {
+        Reservation reservation = getReservation(id);
+        reservation.setRealized(true);
+        return reservationRepository.save(reservation);
+    }
+
     private Reservation getReservation(Long id) {
-        Reservation reservation = reservationRepository.findOne(id.toString());
-        if (reservation == null) {
+        List<Reservation> reservations = reservationRepository.findWithFilter("[id = '" + id + "']");
+        if (reservations.isEmpty()) {
             throw new ReservationNotFoundException();
         }
-        return reservation;
+        return reservations.get(0);
     }
 }
