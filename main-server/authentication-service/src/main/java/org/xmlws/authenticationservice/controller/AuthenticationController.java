@@ -16,11 +16,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.xmlws.authenticationservice.exceptions.UserAlreadyExistsException;
+import org.xmlws.authenticationservice.exceptions.UsernameNullPointerException;
 import org.xmlws.authenticationservice.security.AuthenticationRequest;
 import org.xmlws.authenticationservice.security.TokenUtility;
 import org.xmlws.authenticationservice.security.UserState;
@@ -41,7 +44,7 @@ public class AuthenticationController {
 
 	@RequestMapping(value = "/{token}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserState validateToken(@PathVariable String token) 
-			throws Exception {
+			throws AuthenticationException, Exception {
 		
 		String username = tokenUtility.getUsernameFromToken(token);
 		User user = (User) this.userService.loadUserByUsername(username);
@@ -82,7 +85,7 @@ public class AuthenticationController {
 		return new ResponseEntity<UserState>(userState, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "token/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/token/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public String generateToken(@PathVariable String username) {
 		
 		return this.tokenUtility.generateToken(username, this.userService.loadUserByUsername(username)
@@ -90,5 +93,21 @@ public class AuthenticationController {
 																		 .stream()
 																		 .map(GrantedAuthority::getAuthority)
 																		 .collect(Collectors.toList()));
+	}
+	
+	@RequestMapping(value = "/password/{password}", method = RequestMethod.GET)
+	public String hashPassword(@PathVariable String password) {
+		
+		return this.userService.generatePassword(password);
+	}
+	
+	@RequestMapping(value = "/username/{username}", method = RequestMethod.GET)
+	public ResponseEntity<?> checkIfUsernameExists(@PathVariable String username) throws UsernameNullPointerException {
+		try {
+			this.userService.loadUserByUsername(username);
+			throw new UserAlreadyExistsException(username);
+		} catch (UsernameNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
 	}
 }

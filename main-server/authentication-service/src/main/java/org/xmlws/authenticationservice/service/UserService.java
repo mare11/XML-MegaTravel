@@ -9,7 +9,9 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.xmlws.authenticationservice.exceptions.UsernameNullPointerException;
 import org.xmlws.authenticationservice.model.Administrator;
 import org.xmlws.authenticationservice.model.Agent;
 import org.xmlws.authenticationservice.model.User;
@@ -31,11 +33,14 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private AdministratorRepository adminRepository;
 	
+	@Autowired
+	public PasswordEncoder passwordEncoder;
+	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, UsernameNullPointerException {
 		
 		if (username == null) {
-			return null;
+			throw new UsernameNullPointerException();
 		}
 		
 		User user = (User) loadUser(this.userRepository, username);	
@@ -68,5 +73,9 @@ public class UserService implements UserDetailsService {
 		} else {
 			return null;
 		}
+	}
+	
+	public String generatePassword(String password) {
+		return this.passwordEncoder.encode(password);
 	}
 }
