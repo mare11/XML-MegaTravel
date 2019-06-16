@@ -1,5 +1,7 @@
 package org.xmlws.accommodationservice.endpoint;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -12,15 +14,27 @@ import org.xmlws.accommodationservice.gen.DeleteAccommodationRequest;
 import org.xmlws.accommodationservice.gen.DeleteAccommodationResponse;
 import org.xmlws.accommodationservice.gen.GetAccommodationRequest;
 import org.xmlws.accommodationservice.gen.GetAccommodationResponse;
+import org.xmlws.accommodationservice.gen.GetAccommodationTypesResponse;
+import org.xmlws.accommodationservice.gen.GetAdditionalServicesResponse;
 import org.xmlws.accommodationservice.gen.UpdateAccommodationRequest;
 import org.xmlws.accommodationservice.gen.UpdateAccommodationResponse;
+import org.xmlws.accommodationservice.model.AccommodationType;
+import org.xmlws.accommodationservice.model.AdditionalService;
 import org.xmlws.accommodationservice.service.AccommodationService;
+import org.xmlws.accommodationservice.service.AccommodationTypeService;
+import org.xmlws.accommodationservice.service.AdditionalServiceService;
 
 @Endpoint
 public class AccommodationEndpoint {
 
 	@Autowired
 	private AccommodationService accommodationService;
+	
+	@Autowired
+	private AdditionalServiceService additionalServiceService;
+	
+	@Autowired
+	private AccommodationTypeService accommodationTypeService;
 
 	@PayloadRoot(localPart = "getAccommodationRequest")
 	@ResponsePayload
@@ -44,8 +58,7 @@ public class AccommodationEndpoint {
 	@ResponsePayload
 	public UpdateAccommodationResponse updateAccommodation(@RequestPayload UpdateAccommodationRequest request) {
 		UpdateAccommodationResponse response = new UpdateAccommodationResponse();
-		AccommodationDTO accommodationDTO = null;
-		accommodationDTO = accommodationService.update(request.getAccommodationDTO());
+		AccommodationDTO accommodationDTO = accommodationService.update(request.getAccommodationDTO());
 		response.setAccommodationDTO(accommodationDTO);
 		return response;
 	}
@@ -56,6 +69,24 @@ public class AccommodationEndpoint {
 		DeleteAccommodationResponse response = new DeleteAccommodationResponse();
 		Boolean isDeleted = accommodationService.delete(request.getId());
 		response.setFlag(isDeleted);
+		return response;
+	}
+	
+	@PayloadRoot(localPart = "getAccommodationTypesRequest")
+	@ResponsePayload
+	public GetAccommodationTypesResponse getAccommodationTypes(){
+		GetAccommodationTypesResponse response = new GetAccommodationTypesResponse();
+		List<AccommodationType> accommodationTypes = accommodationTypeService.findAll();
+		response.getAccommodationType().addAll(accommodationTypes);
+		return response;
+	}
+	
+	@PayloadRoot(localPart = "getAdditionalServicesRequest")
+	@ResponsePayload
+	public GetAdditionalServicesResponse getAdditionalServices(){
+		GetAdditionalServicesResponse response = new GetAdditionalServicesResponse();
+		List<AdditionalService> additionalServices = additionalServiceService.findAll();
+		response.getAdditionalService().addAll(additionalServices);
 		return response;
 	}
 }

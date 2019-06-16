@@ -87,6 +87,22 @@
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="getAccommodationTypesResponse">
+    	<xs:complexType>
+    		<xs:sequence>
+    			<xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:AccommodationType"></xs:element>
+    		</xs:sequence>
+    	</xs:complexType>
+    </xs:element>
+    
+    <xs:element name="getAdditionalServicesResponse">
+    	<xs:complexType>
+    		<xs:sequence>
+    			<xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:AdditionalService"></xs:element>
+    		</xs:sequence>
+    	</xs:complexType>
+    </xs:element>
+    
     <xs:element name="AccommodationDTO">
     	<xs:complexType>
             <xs:sequence>
