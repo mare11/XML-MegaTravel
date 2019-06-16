@@ -172,8 +172,15 @@
     <xs:element name="Authority">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="role" type="xs:string"/>
+                <xs:element name="role" type="user:AuthorityEnum"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+    <xs:simpleType name="AuthorityEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ROLE_USER"/>
+            <xs:enumeration value="ROLE_ADMIN"/>
+            <xs:enumeration value="ROLE_AGENT"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>

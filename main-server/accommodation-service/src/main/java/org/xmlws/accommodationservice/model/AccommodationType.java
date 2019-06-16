@@ -10,6 +10,8 @@ package org.xmlws.accommodationservice.model;
 
 import javax.xml.bind.annotation.*;
 
+import org.xmlws.dataservice.entity.Entity;
+
 
 /**
  * <p>Java class for anonymous complex type.
@@ -33,7 +35,7 @@ import javax.xml.bind.annotation.*;
         "typeName"
 })
 @XmlRootElement(name = "AccommodationType")
-public class AccommodationType {
+public class AccommodationType extends Entity {
 
     @XmlElement(required = true)
     protected String typeName;

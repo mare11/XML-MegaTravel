@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.xmlws.org/accommodationservice/gen"
-           targetNamespace="http://www.xmlws.org/accommodationservice/gen"
-           xmlns:acc="https://www.xmlws.org/accommodationservice/model" elementFormDefault="qualified">
- 
- 	<xs:import namespace="https://www.xmlws.org/accommodationservice/model"/>
+           targetNamespace="http://www.xmlws.org/accommodationservice/gen" 
+           xmlns:acm="https://github.com/mare11/XML_MegaTravel/accommodation" 
+           xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0" elementFormDefault="qualified">
+ 	
+ 	<xs:import namespace="https://github.com/mare11/XML_MegaTravel/accommodation" schemaLocation="Accommodation.xsd"/>
     <xs:element name="getAccommodationRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="name" type="xs:string"/>
+                <xs:element name="id" type="xs:long">
+                	<xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                 </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -15,7 +22,182 @@
     <xs:element name="getAccommodationResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="accommodation" type="xs:string"/>
+                <xs:element ref="tns:AccommodationDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="addAccommodationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:AccommodationDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="addAccommodationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:AccommodationDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="updateAccommodationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:AccommodationDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="updateAccommodationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:AccommodationDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="deleteAccommodationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long">
+                	<xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                 </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="deleteAccommodationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="flag" type="xs:boolean">
+                	<xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
+						</xs:appinfo>
+                    </xs:annotation>
+               	</xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="getAccommodationTypesRequest">
+    	<xs:complexType>
+      </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="getAccommodationTypesResponse">
+    	<xs:complexType>
+    		<xs:sequence>
+    			<xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:AccommodationType"></xs:element>
+    		</xs:sequence>
+    	</xs:complexType>
+    </xs:element>
+    
+    <xs:element name="getAdditionalServicesRequest">
+    	<xs:complexType>
+      </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="getAdditionalServicesResponse">
+    	<xs:complexType>
+    		<xs:sequence>
+    			<xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:AdditionalService"></xs:element>
+    		</xs:sequence>
+    	</xs:complexType>
+    </xs:element>
+    
+    <xs:element name="AccommodationDTO">
+    	<xs:complexType>
+            <xs:sequence>
+            	<xs:element name="id" type="xs:long">
+            		<xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+            	</xs:element>
+                <xs:element ref="acm:AccommodationType"/>
+                <xs:element name="category">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:appinfo>
+								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
+							</xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:int">
+                            <xs:minInclusive value="0"/>
+                            <xs:maxInclusive value="5"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:AdditionalService"/>
+                <xs:element name="freeCancellation" type="xs:boolean">
+                    <xs:annotation>
+                        <xs:appinfo>
+							<jxb:javaType name="java.lang.Boolean" parseMethod="org.xmlws.util.TypeConverter.parseBoolean"/>
+						</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="cancellationDays">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:appinfo>
+								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
+							</xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:int">
+                            <xs:totalDigits value="2"/>
+                            <xs:minInclusive value="0"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element minOccurs="1" name="cancellationPrice" type="acm:TPrice"/>
+                <xs:element name="description">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="200"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="1" name="images" type="xs:string"> </xs:element>
+                <xs:element name="numberOfPersons">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:appinfo>
+								<jxb:javaType name="java.lang.Integer" parseMethod="org.xmlws.util.TypeConverter.parseInteger"/>
+							</xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:int">
+                            <xs:totalDigits value="2"/>
+                            <xs:minInclusive value="0"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="agentId" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="defaultPrice" type="acm:TPrice"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:PeriodPrice"/>
+                <xs:element ref="acm:Location"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="acm:Unavailability"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="reservationIds" type="xs:long">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <jxb:javaType name="java.lang.Long" parseMethod="org.xmlws.util.TypeConverter.parseLong"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

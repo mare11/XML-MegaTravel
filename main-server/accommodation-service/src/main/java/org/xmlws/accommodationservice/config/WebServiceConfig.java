@@ -1,4 +1,4 @@
-package org.xmlws.accommodationservice.endpoint;
+package org.xmlws.accommodationservice.config;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
