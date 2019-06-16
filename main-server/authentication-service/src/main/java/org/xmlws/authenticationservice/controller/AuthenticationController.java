@@ -102,12 +102,21 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping(value = "/username/{username}", method = RequestMethod.GET)
-	public ResponseEntity<?> checkIfUsernameExists(@PathVariable String username) throws UsernameNullPointerException {
+	public ResponseEntity<?> checkUsername(@PathVariable String username) throws UsernameNullPointerException {
 		try {
 			this.userService.loadUserByUsername(username);
 			throw new UserAlreadyExistsException(username);
 		} catch (UsernameNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/email/{email}", method = RequestMethod.GET)
+	public ResponseEntity<?> checkEmail(@PathVariable String email) throws AuthenticationException {
+		if (this.userService.checkEmail(email)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}
 }
