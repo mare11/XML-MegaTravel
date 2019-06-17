@@ -31,9 +31,15 @@ public class ReservationController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET, value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Reservation>> getUserReservations(@PathVariable Long id) {
         List<Reservation> reservations = reservationService.findReservationsByUser(id);
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/accommodations/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Reservation>> getAccommodationReservations(@PathVariable Long id) {
+        List<Reservation> reservations = reservationService.findReservationsByAccommodation(id);
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 

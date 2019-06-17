@@ -5,9 +5,8 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-import org.xmlws.reservationservice.gen.GetAccReservationRequest;
-import org.xmlws.reservationservice.gen.GetReservationResponse;
-import org.xmlws.reservationservice.gen.GetUserReservationRequest;
+import org.xmlws.reservationservice.gen.*;
+import org.xmlws.reservationservice.model.Reservation;
 import org.xmlws.reservationservice.service.ReservationService;
 
 @Endpoint
@@ -16,25 +15,31 @@ public class ReservationEndpoint {
     @Autowired
     private ReservationService reservationService;
 
-    @PayloadRoot(localPart = "getUserReservationRequest")
+    @PayloadRoot(localPart = "getReservationRequest")
     @ResponsePayload
-    public GetReservationResponse getReservationsByUser(@RequestPayload GetUserReservationRequest userReservationRequest) {
-
+    public GetReservationResponse getReservationsByAccommodation(@RequestPayload GetReservationRequest accReservationRequest) {
         GetReservationResponse response = new GetReservationResponse();
-        reservationService.findReservationsByUser(userReservationRequest.getUserId())
+        reservationService.findReservationsByAccommodation(accReservationRequest.getAccommodationId())
                 .stream().forEach(res -> response.getReservation().add(res));
 
         return response;
     }
 
-    @PayloadRoot(localPart = "getAccReservationRequest")
+    @PayloadRoot(localPart = "addMessageRequest")
     @ResponsePayload
-    public GetReservationResponse getReservationsByAccommodation(@RequestPayload GetAccReservationRequest accReservationRequest) {
+    public AddMessageResponse addMessage(@RequestPayload AddMessageRequest addMessageRequest) {
+        AddMessageResponse response = new AddMessageResponse();
+        Reservation reservation = reservationService.addMessage(addMessageRequest.getReservationId(), addMessageRequest.getMessage());
+        response.setReservation(reservation);
+        return response;
+    }
 
-        GetReservationResponse response = new GetReservationResponse();
-        reservationService.findReservationsByAccommodation(accReservationRequest.getAccommodationId())
-                .stream().forEach(res -> response.getReservation().add(res));
-
+    @PayloadRoot(localPart = "setRealizedRequest")
+    @ResponsePayload
+    public SetRealizedResponse setRealized(@RequestPayload SetRealizedRequest setRealizedRequest) {
+        SetRealizedResponse response = new SetRealizedResponse();
+        Reservation reservation = reservationService.setRealized(setRealizedRequest.getReservationId());
+        response.setReservation(reservation);
         return response;
     }
 
