@@ -119,4 +119,9 @@ public class AuthenticationController {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	@RequestMapping(value = "/username/token/{token}", method = RequestMethod.GET)
+	public String getUsernameFromToken(@PathVariable String token) throws Exception {
+		return this.tokenUtility.getUsernameFromToken(token);
+	}
 }
