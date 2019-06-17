@@ -40,16 +40,54 @@
     		<artifactId>springfox-swagger-ui</artifactId>
     		<version>2.9.2</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.xmlws.dataservice</groupId>
+		    <artifactId>exist-xqj</artifactId>
+		    <version>1.0.1</version>
+		    <scope>system</scope>
+		    <systemPath>${project.basedir}/lib/exist-xqj-1.0.1.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.xmlws.dataservice</groupId>
+		    <artifactId>xqj2</artifactId>
+		    <version>0.0.1</version>
+		    <scope>system</scope>
+		    <systemPath>${project.basedir}/lib/xqj2-0.0.1.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.xmlws.dataservice</groupId>
+		    <artifactId>data-service</artifactId>
+		    <version>0.0.1</version>
+		    <scope>system</scope>
+		    <systemPath>${project.basedir}/lib/data-service-0.0.1-SNAPSHOT-jar-with-dependencies.jar</systemPath>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 	</dependencies>
 
