@@ -1,6 +1,7 @@
 package org.xmlws.authenticationservice.controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -123,5 +124,10 @@ public class AuthenticationController {
 	@RequestMapping(value = "/username/token/{token}", method = RequestMethod.GET)
 	public String getUsernameFromToken(@PathVariable String token) throws Exception {
 		return this.tokenUtility.getUsernameFromToken(token);
+	}
+	
+	@RequestMapping(value = "/expirationdate/token/{token}", method = RequestMethod.GET)
+	public Date getExpirationDateFromToken(@PathVariable String token) throws Exception {
+		return this.tokenUtility.getExpirationDateFromToken(token);
 	}
 }

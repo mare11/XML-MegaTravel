@@ -59,4 +59,9 @@ public class TokenUtility {
 		Claims claims = this.getClaimsFromToken(token);
 		return (List<String>) claims.get(authoritiesClaim);
 	}
+	
+	public Date getExpirationDateFromToken(String token) throws Exception {
+		Claims claims = this.getClaimsFromToken(token);
+		return claims.getExpiration();
+	}
 }
