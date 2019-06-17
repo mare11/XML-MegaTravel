@@ -11,9 +11,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.xmlws.authenticationservice.exceptions.EmailNullPointerException;
 import org.xmlws.authenticationservice.exceptions.UsernameNullPointerException;
 import org.xmlws.authenticationservice.model.Administrator;
 import org.xmlws.authenticationservice.model.Agent;
+import org.xmlws.authenticationservice.model.Authority;
 import org.xmlws.authenticationservice.model.User;
 import org.xmlws.authenticationservice.repository.AdministratorRepository;
 import org.xmlws.authenticationservice.repository.AgentRepository;
@@ -43,31 +45,43 @@ public class UserService implements UserDetailsService {
 			throw new UsernameNullPointerException();
 		}
 		
-		User user = (User) loadUser(this.userRepository, username);	
+		User user = (User) loadByProperty(this.userRepository, "username", username);	
 		if (user != null) {
-			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", user.getAuthority().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())));
+			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", user.getAuthority().stream().map(Authority::getAuthority).collect(Collectors.toList())));
 			return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities); 							
 		} 
 		
-		Agent agent = (Agent) loadUser(this.agentRepository, username);	
+		Agent agent = (Agent) loadByProperty(this.agentRepository, "username", username);	
 		if (agent != null) {
-			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", agent.getAuthority().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())));
+			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", agent.getAuthority().stream().map(Authority::getAuthority).collect(Collectors.toList())));
 			return new org.springframework.security.core.userdetails.User(agent.getUsername(), agent.getPassword(), authorities); 							
 		}
 		
-		Administrator admin = (Administrator) loadUser(this.adminRepository, username);	
+		Administrator admin = (Administrator) loadByProperty(this.adminRepository, "username", username);	
 		if (admin != null) {
-			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", admin.getAuthority().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())));
+			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", admin.getAuthority().stream().map(Authority::getAuthority).collect(Collectors.toList())));
 			return new org.springframework.security.core.userdetails.User(admin.getUsername(), admin.getPassword(), authorities); 							
 		} else {
 			throw new UsernameNotFoundException("User with username '" + username + "' is not found.");			
 		}
-		
 	}
 	
-	private Entity loadUser(ExistXQJRepository<?> repository, String username) {
+	public boolean checkEmail(String email) throws UsernameNotFoundException, UsernameNullPointerException {
 		
-		List<?> entities = repository.findWithFilter("[username='" + username + "']");
+		if (email == null) {
+			throw new EmailNullPointerException();
+		}
+			
+		if (loadByProperty(this.userRepository, "email", email) != null || loadByProperty(this.agentRepository, "email", email) != null) {
+			return false;   							
+		} 
+		
+		return true;
+	}
+	
+	private Entity loadByProperty(ExistXQJRepository<?> repository, String propertyName, String value) {
+		
+		List<?> entities = repository.findWithFilter("[" + propertyName + "='" + value + "']");
 		if (!entities.isEmpty()) {
 			 return (Entity) entities.get(0);
 		} else {
