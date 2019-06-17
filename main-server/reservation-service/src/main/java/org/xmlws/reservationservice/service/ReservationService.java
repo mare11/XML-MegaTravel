@@ -70,6 +70,9 @@ public class ReservationService {
                 .body(BodyInserters.fromObject(reservationCancelling))
                 .retrieve()
                 .bodyToMono(ReservationCancelling.class)
+                .doOnError(throwable -> {
+                    throw new ReservationCancelingException();
+                })
                 .block();
 
         if (reservationCancelling.getAllowedCancellation()) {
