@@ -3,11 +3,13 @@ package org.xmlws.reservationservice.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.xmlws.dataservice.catalog.CatalogRepository;
+import org.xmlws.reservationservice.exceptions.ReservationCancelingException;
+import org.xmlws.reservationservice.exceptions.ReservationCreatingException;
 import org.xmlws.reservationservice.exceptions.ReservationNotFoundException;
 import org.xmlws.reservationservice.model.Message;
 import org.xmlws.reservationservice.model.Reservation;
@@ -33,33 +35,31 @@ public class ReservationService {
         reservation.setId(catalogRepository.getCatalogId(reservationRepository.getRootElementName()));
 
 //      CALL TO USER SERVICE
-        ResponseEntity userResponseEntity = webClientBuilder.build()
+        ClientResponse userClientResponse = webClientBuilder.build()
                 .put()
                 .uri("http://user-service/users/" + reservation.getUserId() + "/reservations/" + reservation.getId())
-                .retrieve()
-                .bodyToMono(ResponseEntity.class)
+                .exchange()
                 .block();
 
-        if (userResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
+        if (userClientResponse.statusCode().equals(HttpStatus.OK)) {
 //      CALL TO ACCOMMODATION SERVICE
-            ResponseEntity accResponseEntity = webClientBuilder.build()
+            ClientResponse accClientResponse = webClientBuilder.build()
                     .put()
                     .uri("http://accommodation-service/accommodations/" + reservation.getAccommodationId() + "/reservations/" + reservation.getId())
-                    .retrieve()
-                    .bodyToMono(ResponseEntity.class)
+                    .exchange()
                     .block();
 
-            if (accResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
+            if (accClientResponse.statusCode().equals(HttpStatus.OK)) {
                 return reservationRepository.save(reservation);
             }
 
         }
 
-        throw new ReservationNotFoundException();
+        throw new ReservationCreatingException();
     }
 
     public void cancelReservation(Long id) {
-        Reservation reservation = reservationRepository.findOne(id.toString());
+        Reservation reservation = getReservation(id);
 
         ReservationCancelling reservationCancelling = new ReservationCancelling(reservation.getAccommodationId(), reservation.getId(), reservation.getStartDate(), false);
 //      CALL TO ACCOMMODATION SERVICE FOR CANCELLING CHECK
@@ -74,17 +74,19 @@ public class ReservationService {
 
         if (reservationCancelling.getAllowedCancellation()) {
 //      CALL TO USER SERVICE
-            ResponseEntity responseEntity = webClientBuilder.build()
+            ClientResponse clientResponse = webClientBuilder.build()
                     .delete()
                     .uri("http://user-service/users/" + reservation.getUserId() + "/reservations/" + reservation.getId())
-                    .retrieve()
-                    .bodyToMono(ResponseEntity.class)
+                    .exchange()
                     .block();
 
-            if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
+            if (clientResponse.statusCode().equals(HttpStatus.OK)) {
                 reservationRepository.delete(reservation);
+                return;
             }
         }
+
+        throw new ReservationCancelingException();
     }
 
     public List<Reservation> findReservationsByUser(Long userId) {
