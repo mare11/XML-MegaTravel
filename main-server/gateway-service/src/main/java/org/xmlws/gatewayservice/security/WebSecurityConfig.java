@@ -38,6 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			//Allow anyone to access authentication endpoint
 			.antMatchers(tokenUtility.getAuthPath()).permitAll()
+			.antMatchers("/search-service/search").permitAll()
 			//Test if endpoint /admin/role/required/test is authorized correctly
 			.antMatchers("/admin/role/required/test/**").hasAuthority("ROLE_ADMIN")
 			.anyRequest().authenticated();

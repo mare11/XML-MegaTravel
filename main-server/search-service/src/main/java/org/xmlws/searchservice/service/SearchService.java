@@ -29,6 +29,7 @@ import org.xmlws.searchservice.model.Accommodation;
 import org.xmlws.searchservice.model.AccommodationType;
 import org.xmlws.searchservice.model.AdditionalService;
 import org.xmlws.searchservice.model.Location;
+import org.xmlws.searchservice.model.PeriodPrice;
 import org.xmlws.searchservice.model.Reservation;
 import org.xmlws.searchservice.repository.AccommodationRepository;
 import org.xmlws.searchservice.repository.AccommodationTypeRepository;
@@ -99,10 +100,30 @@ public class SearchService {
 			resultDto.setAccommodationType(this.findOneAccommodationTypeById(accommodation.getAccommodationTypeId()));
 			resultDto.setAdditionalServices(this.findAllAdditionalServicesByIds(accommodation.getAdditionalServiceIds()));
 			resultDto.setLocation(this.findOneLocationById(accommodation.getLocationId()));
+			resultDto.setPriceForRequestedPeriod(this.findPriceForRequestedPeriod(accommodation, searchDto.getStartDate(), searchDto.getEndDate()));
 			resultDtos.add(resultDto);
 		}
 		
 		return resultDtos;
+	}
+	
+	private Double findPriceForRequestedPeriod(Accommodation accommodation, LocalDate startDate, LocalDate endDate) {
+		List<PeriodPrice> periodPrices = accommodation.getPeriodPrice().stream().filter(periodPrice -> {
+			if (((periodPrice.getStartDate().isBefore(startDate) || periodPrice.getStartDate().isEqual(startDate)) &&
+				(periodPrice.getEndDate().isAfter(startDate) || periodPrice.getEndDate().isEqual(startDate))) ||
+				((periodPrice.getStartDate().isBefore(endDate) || periodPrice.getStartDate().isEqual(endDate)) &&
+				(periodPrice.getEndDate().isAfter(endDate) || periodPrice.getEndDate().isEqual(endDate)))) {
+				return true;
+			} else {
+				return false;
+			}
+		}).collect(Collectors.toList());
+		
+		if (periodPrices.isEmpty()) {
+			return accommodation.getDefaultPrice().doubleValue();
+		} else {
+			return periodPrices.get(0).getPrice().doubleValue();
+		}
 	}
 	
 	private List<Accommodation> findAllByNumOfPersonsAndCategoryAndTypeAndAdditionalServices(int numberOfPersons, 

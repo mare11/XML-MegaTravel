@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.xmlws.authenticationservice.exceptions.UserAlreadyExistsException;
 import org.xmlws.authenticationservice.exceptions.UsernameNullPointerException;
+import org.xmlws.authenticationservice.exceptions.WrongAuthorityException;
 import org.xmlws.authenticationservice.security.AuthenticationRequest;
 import org.xmlws.authenticationservice.security.TokenUtility;
 import org.xmlws.authenticationservice.security.UserState;
@@ -66,13 +67,17 @@ public class AuthenticationController {
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserState> authenticateUser(@RequestBody AuthenticationRequest authenticationRequest) 
 			throws AuthenticationException, IOException {
-		
+
 		UsernamePasswordAuthenticationToken authenticationToken 
 											= new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
 																					  authenticationRequest.getPassword());
 		
 		//Try to authenticate user
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
+		
+		if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(authenticationRequest.getAuthority().name()))) {
+			throw new WrongAuthorityException(authenticationRequest.getUsername(), authenticationRequest.getAuthority());
+		}
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
