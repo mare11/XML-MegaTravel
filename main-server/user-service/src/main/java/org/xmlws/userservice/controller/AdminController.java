@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.xmlws.userservice.model.Administrator;
+import org.xmlws.userservice.model.Agent;
 import org.xmlws.userservice.model.UserDto;
 import org.xmlws.userservice.service.AdminService;
+import org.xmlws.userservice.service.AgentService;
 import org.xmlws.userservice.service.UserService;
 
 @RestController
@@ -19,6 +21,9 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private AgentService agentService;
 
     @Autowired
     private UserService userService;
@@ -33,6 +38,12 @@ public class AdminController {
     public ResponseEntity<Administrator> deleteAdmin(@RequestBody Administrator administrator) {
         adminService.deleteAdmin(administrator);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/agents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Agent> addAgent(@RequestBody Agent agent) {
+        agent = agentService.addAgent(agent);
+        return new ResponseEntity<>(agent, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "users/enable", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -53,5 +64,4 @@ public class AdminController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-//    ADD AGENT CREATE AND REMOVE METHODS
 }
