@@ -8,20 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import org.xmlws.userservice.model.UserDto;
 import org.xmlws.userservice.service.UserService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> users = this.userService.findAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getOneUser(@PathVariable String username) {

@@ -1,5 +1,6 @@
 package org.xmlws.userservice.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -9,11 +10,13 @@ import org.xmlws.dataservice.catalog.CatalogRepository;
 import org.xmlws.userservice.exceptions.UserAlreadyExistsException;
 import org.xmlws.userservice.exceptions.UserNotFoundException;
 import org.xmlws.userservice.model.Agent;
+import org.xmlws.userservice.model.AgentDto;
 import org.xmlws.userservice.model.Authority;
 import org.xmlws.userservice.model.AuthorityEnum;
 import org.xmlws.userservice.repository.AgentRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AgentService {
@@ -26,6 +29,16 @@ public class AgentService {
 
     @Autowired
     private WebClient.Builder webClientBuilder;
+
+    private ModelMapper mapper = new ModelMapper();
+
+    public List<AgentDto> findAllAgents() {
+        List<Agent> agents = agentRepository.findAll();
+
+        return agents.stream().map(agent ->
+                mapper.map(agent, AgentDto.class)
+        ).collect(Collectors.toList());
+    }
 
     public Agent addAgent(Agent agent) {
 

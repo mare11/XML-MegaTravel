@@ -12,6 +12,8 @@ import org.xmlws.userservice.model.Authority;
 import org.xmlws.userservice.model.AuthorityEnum;
 import org.xmlws.userservice.repository.AdminRepository;
 
+import java.util.List;
+
 @Service
 public class AdminService {
 
@@ -23,6 +25,11 @@ public class AdminService {
 
     @Autowired
     private WebClient.Builder webClientBuilder;
+
+    public List<Administrator> findAllAdmins() {
+        List<Administrator> admins = adminRepository.findAll();
+        return admins;
+    }
 
     public Administrator addAdmin(Administrator administrator) {
 

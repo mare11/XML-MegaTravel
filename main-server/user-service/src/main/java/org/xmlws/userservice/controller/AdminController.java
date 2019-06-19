@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.xmlws.userservice.model.Administrator;
 import org.xmlws.userservice.model.Agent;
+import org.xmlws.userservice.model.AgentDto;
 import org.xmlws.userservice.model.UserDto;
 import org.xmlws.userservice.service.AdminService;
 import org.xmlws.userservice.service.AgentService;
 import org.xmlws.userservice.service.UserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/admins")
@@ -28,6 +31,12 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Administrator>> getAllAdmins() {
+        List<Administrator> admins = this.adminService.findAllAdmins();
+        return new ResponseEntity<>(admins, HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Administrator> addAdmin(@RequestBody Administrator administrator) {
         administrator = adminService.addAdmin(administrator);
@@ -40,10 +49,22 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/agents", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AgentDto>> getAllAgents() {
+        List<AgentDto> agents = this.agentService.findAllAgents();
+        return new ResponseEntity<>(agents, HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/agents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Agent> addAgent(@RequestBody Agent agent) {
         agent = agentService.addAgent(agent);
         return new ResponseEntity<>(agent, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "users", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = this.userService.findAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "users/enable", consumes = MediaType.APPLICATION_JSON_VALUE)
