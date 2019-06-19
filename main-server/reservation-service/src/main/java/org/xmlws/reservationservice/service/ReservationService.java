@@ -32,6 +32,7 @@ public class ReservationService {
     private WebClient.Builder webClientBuilder;
 
     public Reservation createReservation(Reservation reservation) {
+        reservation.setRealized(false);
         reservation.setId(catalogRepository.getCatalogId(reservationRepository.getRootElementName()));
 
 //      CALL TO USER SERVICE

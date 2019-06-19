@@ -7,10 +7,13 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.xmlws.dataservice.catalog.CatalogRepository;
 import org.xmlws.userservice.exceptions.UserAlreadyExistsException;
+import org.xmlws.userservice.exceptions.UserNotFoundException;
 import org.xmlws.userservice.model.Agent;
 import org.xmlws.userservice.model.Authority;
 import org.xmlws.userservice.model.AuthorityEnum;
 import org.xmlws.userservice.repository.AgentRepository;
+
+import java.util.List;
 
 @Service
 public class AgentService {
@@ -48,5 +51,25 @@ public class AgentService {
         }
 
         throw new UserAlreadyExistsException(agent.getUsername(), agent.getEmail());
+    }
+
+    public void addAccommodation(Long agentId, Long accommodationId) {
+        Agent agent = getAgent(agentId);
+        agent.getAccommodationId().add(accommodationId);
+        agentRepository.save(agent);
+    }
+
+    public void removeAccommodation(Long agentId, Long accommodationId) {
+        Agent agent = getAgent(agentId);
+        agent.getAccommodationId().remove(accommodationId);
+        agentRepository.save(agent);
+    }
+
+    private Agent getAgent(Long agentId) {
+        List<Agent> agents = agentRepository.findWithFilter("[id = '" + agentId + "']");
+        if (agents.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        return agents.get(0);
     }
 }

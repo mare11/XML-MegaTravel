@@ -40,7 +40,7 @@ public class EmailService {
 			String message = "Hello " + user.getUsername() + ",<br><br>"
 					+ "Thank you for registering your MegaTravel account. To finally activate your account please "
 					+ "<a href=\"" + makeActivationLink(user.getUsername(), request) + "\">click here.</a><br><br>"
-					+ "Regards, <br><br>" + "<i>Your TakeOff Team</i>";
+					+ "Regards, <br><br>" + "<i>Your MegaTravel Team</i>";
 			helper.setText(message, true);
 			javaMailSender.send(mail);
 		} catch (MessagingException e) {

@@ -63,8 +63,10 @@ public class UserService {
 				 user.setPassword(hashedPassword);
 				// Set user's authority
 				Authority userAuthority = new Authority();
-				userAuthority.setRole(AuthorityEnum.fromValue("ROLE_USER"));
+				userAuthority.setRole(AuthorityEnum.ROLE_USER);
 				user.getAuthority().add(userAuthority);
+				user.setEnabled(false);
+				user.setDeleted(false);
 				Long id = catalogRepository.getCatalogId(userRepository.getRootElementName());
 				user.setId(id);
 				user = userRepository.save(user);
