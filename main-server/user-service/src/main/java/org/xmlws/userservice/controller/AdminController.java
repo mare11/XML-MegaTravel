@@ -56,9 +56,9 @@ public class AdminController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/agents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Agent> addAgent(@RequestBody Agent agent) {
-        agent = agentService.addAgent(agent);
-        return new ResponseEntity<>(agent, HttpStatus.OK);
+    public ResponseEntity<AgentDto> addAgent(@RequestBody Agent agent) {
+        AgentDto agentDto = agentService.addAgent(agent);
+        return new ResponseEntity<>(agentDto, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "users", produces = MediaType.APPLICATION_JSON_VALUE)

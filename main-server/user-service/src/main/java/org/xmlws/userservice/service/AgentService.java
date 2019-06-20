@@ -40,7 +40,7 @@ public class AgentService {
         ).collect(Collectors.toList());
     }
 
-    public Agent addAgent(Agent agent) {
+    public AgentDto addAgent(Agent agent) {
 
 //        CALLS TO AUTH SERVICE FOR UNIQUE USERNAME AND EMAIL CHECK
         ClientResponse usernameClientResponse = webClientBuilder.build()
@@ -59,7 +59,7 @@ public class AgentService {
             if (emailClientResponse.statusCode().equals(HttpStatus.OK)) {
                 agent.setId(catalogRepository.getCatalogId(agentRepository.getRootElementName()));
                 agent.getAuthority().add(new Authority(AuthorityEnum.ROLE_AGENT));
-                return agentRepository.save(agent);
+                return mapper.map(agentRepository.save(agent), AgentDto.class);
             }
         }
 
