@@ -8,8 +8,8 @@ import org.xmlws.userservice.model.User;
 import org.xmlws.userservice.model.UserDto;
 import org.xmlws.userservice.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -21,13 +21,10 @@ public class UserService {
 
     public List<UserDto> findAllUsers() {
         List<User> users = userRepository.findAll();
-        List<UserDto> usersDto = new ArrayList<>();
 
-        for (User user : users) {
-            usersDto.add(mapper.map(user, UserDto.class));
-        }
-
-        return usersDto;
+        return users.stream().map(user ->
+                mapper.map(user, UserDto.class)
+        ).collect(Collectors.toList());
     }
 
     public UserDto findOneUser(String username) {
