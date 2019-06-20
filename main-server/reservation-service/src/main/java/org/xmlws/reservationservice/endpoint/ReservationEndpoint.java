@@ -6,6 +6,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import org.xmlws.reservationservice.gen.*;
+import org.xmlws.reservationservice.model.Message;
 import org.xmlws.reservationservice.model.Reservation;
 import org.xmlws.reservationservice.service.ReservationService;
 
@@ -29,8 +30,8 @@ public class ReservationEndpoint {
     @ResponsePayload
     public AddMessageResponse addMessage(@RequestPayload AddMessageRequest addMessageRequest) {
         AddMessageResponse response = new AddMessageResponse();
-        Reservation reservation = reservationService.addMessage(addMessageRequest.getReservationId(), addMessageRequest.getMessage());
-        response.setReservation(reservation);
+        Message message = reservationService.addMessage(addMessageRequest.getReservationId(), addMessageRequest.getMessage());
+        response.setMessage(message);
         return response;
     }
 

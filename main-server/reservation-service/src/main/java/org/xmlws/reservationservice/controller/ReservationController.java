@@ -44,9 +44,9 @@ public class ReservationController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Reservation> addMessage(@PathVariable Long id, @RequestBody Message message) {
-        Reservation reservation = reservationService.addMessage(id, message);
-        return new ResponseEntity<>(reservation, HttpStatus.OK);
+    public ResponseEntity<Message> addMessage(@PathVariable Long id, @RequestBody Message message) {
+        message = reservationService.addMessage(id, message);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}/rating", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

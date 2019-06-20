@@ -17,6 +17,7 @@ import org.xmlws.reservationservice.model.ReservationCancelling;
 import org.xmlws.reservationservice.model.ReservationRating;
 import org.xmlws.reservationservice.repository.ReservationRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -101,10 +102,12 @@ public class ReservationService {
         return reservationRepository.findWithFilter("[accommodationId = '" + accommodationId + "']");
     }
 
-    public Reservation addMessage(Long id, Message message) {
+    public Message addMessage(Long id, Message message) {
         Reservation reservation = getReservation(id);
+        message.setTimestamp(LocalDateTime.now());
         reservation.getMessage().add(message);
-        return reservationRepository.save(reservation);
+        reservationRepository.save(reservation);
+        return message;
     }
 
     public Reservation addRating(Long id, ReservationRating reservationRating) {

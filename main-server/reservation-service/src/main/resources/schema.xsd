@@ -47,7 +47,7 @@
     <xs:element name="addMessageResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="res:Reservation"/>
+                <xs:element ref="res:Message"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
