@@ -1,15 +1,16 @@
 package org.xmlws.userservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.xmlws.dataservice.catalog.CatalogRepository;
 import org.xmlws.userservice.exceptions.UserAlreadyExistsException;
 import org.xmlws.userservice.model.Administrator;
 import org.xmlws.userservice.model.Authority;
 import org.xmlws.userservice.model.AuthorityEnum;
+import org.xmlws.userservice.model.UserUniquenessDto;
 import org.xmlws.userservice.repository.AdminRepository;
 
 import java.util.List;
@@ -33,20 +34,25 @@ public class AdminService {
 
     public Administrator addAdmin(Administrator administrator) {
 
-//        CALL TO AUTH SERVICE FOR UNIQUE USERNAME CHECK
-        ClientResponse clientResponse = webClientBuilder.build()
-                .get()
-                .uri("http://authentication-service/authentication/username/" + administrator.getUsername())
-                .exchange()
+//        CALL TO AUTH SERVICE FOR UNIQUE USERNAME CHECK AND PASSWORD HASHING
+        UserUniquenessDto userUniquenessDto = new UserUniquenessDto(administrator.getUsername(), administrator.getPassword(), null);
+        userUniquenessDto = webClientBuilder.build()
+                .post()
+                .uri("http://authentication-service/authentication/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(userUniquenessDto))
+                .retrieve()
+                .bodyToMono(UserUniquenessDto.class)
+                .doOnError(throwable -> {
+                    throw new UserAlreadyExistsException(administrator.getUsername());
+                })
                 .block();
 
-        if (clientResponse.statusCode().equals(HttpStatus.OK)) {
-            administrator.setId(catalogRepository.getCatalogId(adminRepository.getRootElementName()));
-            administrator.getAuthority().add(new Authority(AuthorityEnum.ROLE_ADMIN));
-            return adminRepository.save(administrator);
-        }
+        administrator.setId(catalogRepository.getCatalogId(adminRepository.getRootElementName()));
+        administrator.setPassword(userUniquenessDto.getPassword());
+        administrator.getAuthority().add(new Authority(AuthorityEnum.ROLE_ADMIN));
+        return adminRepository.save(administrator);
 
-        throw new UserAlreadyExistsException(administrator.getUsername());
     }
 
     public void deleteAdmin(Administrator administrator) {

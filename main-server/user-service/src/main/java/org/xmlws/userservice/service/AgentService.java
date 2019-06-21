@@ -2,17 +2,14 @@ package org.xmlws.userservice.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.xmlws.dataservice.catalog.CatalogRepository;
 import org.xmlws.userservice.exceptions.UserAlreadyExistsException;
 import org.xmlws.userservice.exceptions.UserNotFoundException;
-import org.xmlws.userservice.model.Agent;
-import org.xmlws.userservice.model.AgentDto;
-import org.xmlws.userservice.model.Authority;
-import org.xmlws.userservice.model.AuthorityEnum;
+import org.xmlws.userservice.model.*;
 import org.xmlws.userservice.repository.AgentRepository;
 
 import java.util.List;
@@ -42,28 +39,25 @@ public class AgentService {
 
     public AgentDto addAgent(Agent agent) {
 
-//        CALLS TO AUTH SERVICE FOR UNIQUE USERNAME AND EMAIL CHECK
-        ClientResponse usernameClientResponse = webClientBuilder.build()
-                .get()
-                .uri("http://authentication-service/authentication/username/" + agent.getUsername())
-                .exchange()
+//        CALL TO AUTH SERVICE FOR UNIQUE USERNAME AND EMAIL CHECK AND PASSWORD HASHING
+        UserUniquenessDto userUniquenessDto = new UserUniquenessDto(agent.getUsername(), agent.getPassword(), agent.getEmail());
+        userUniquenessDto = webClientBuilder.build()
+                .post()
+                .uri("http://authentication-service/authentication/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(userUniquenessDto))
+                .retrieve()
+                .bodyToMono(UserUniquenessDto.class)
+                .doOnError(throwable -> {
+                    throw new UserAlreadyExistsException(agent.getUsername(), agent.getEmail());
+                })
                 .block();
 
-        if (usernameClientResponse.statusCode().equals(HttpStatus.OK)) {
-            ClientResponse emailClientResponse = webClientBuilder.build()
-                    .get()
-                    .uri("http://authentication-service/authentication/email/" + agent.getEmail())
-                    .exchange()
-                    .block();
+        agent.setId(catalogRepository.getCatalogId(agentRepository.getRootElementName()));
+        agent.setPassword(userUniquenessDto.getPassword());
+        agent.getAuthority().add(new Authority(AuthorityEnum.ROLE_AGENT));
+        return mapper.map(agentRepository.save(agent), AgentDto.class);
 
-            if (emailClientResponse.statusCode().equals(HttpStatus.OK)) {
-                agent.setId(catalogRepository.getCatalogId(agentRepository.getRootElementName()));
-                agent.getAuthority().add(new Authority(AuthorityEnum.ROLE_AGENT));
-                return mapper.map(agentRepository.save(agent), AgentDto.class);
-            }
-        }
-
-        throw new UserAlreadyExistsException(agent.getUsername(), agent.getEmail());
     }
 
     public void addAccommodation(Long agentId, Long accommodationId) {
