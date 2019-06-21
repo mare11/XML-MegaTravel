@@ -9,6 +9,7 @@
 package org.xmlws.authenticationservice.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -19,9 +20,9 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.xmlws.dataservice.adapter.BooleanAdapter;
 import org.xmlws.dataservice.adapter.LongAdapter;
-import org.xmlws.dataservice.entity.Entity;
 
 
 /**
@@ -98,9 +99,11 @@ import org.xmlws.dataservice.entity.Entity;
     "authority"
 })
 @XmlRootElement(name = "User")
-public class User extends Entity {
+public class User extends UserEntity {
 
-    @XmlElement(required = true)
+	private static final long serialVersionUID = -3521262447771199506L;
+	
+	@XmlElement(required = true)
     protected String username;
     @XmlElement(required = true)
     protected String password;
@@ -253,7 +256,8 @@ public class User extends Entity {
      *     {@link String }
      *     
      */
-    public Boolean isEnabled() {
+    @Override
+    public boolean isEnabled() {
         return enabled;
     }
 
@@ -351,4 +355,13 @@ public class User extends Entity {
         return this.authority;
     }
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.getAuthority();
+	}
+	
+	@Override
+	public boolean isAccountNonLocked() {
+		return !deleted;
+	}
 }

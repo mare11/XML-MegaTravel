@@ -16,7 +16,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.xmlws.authenticationservice.exceptions.UserAlreadyExistsException;
 import org.xmlws.authenticationservice.exceptions.UsernameNullPointerException;
 import org.xmlws.authenticationservice.exceptions.WrongAuthorityException;
+import org.xmlws.authenticationservice.model.UserEntity;
 import org.xmlws.authenticationservice.security.AuthenticationRequest;
 import org.xmlws.authenticationservice.security.TokenUtility;
 import org.xmlws.authenticationservice.security.UserState;
@@ -49,7 +49,7 @@ public class AuthenticationController {
 			throws AuthenticationException, Exception {
 		
 		String username = tokenUtility.getUsernameFromToken(token);
-		User user = (User) this.userService.loadUserByUsername(username);
+		UserEntity user = (UserEntity) this.userService.loadUserByUsername(username);
 		
 		if (user == null) {
 			return null;
@@ -61,7 +61,7 @@ public class AuthenticationController {
 			return null;
 		}
 		
-		return new UserState(token, username, authorities);
+		return new UserState(token, username, user.getId());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,7 +87,7 @@ public class AuthenticationController {
 		String token = tokenUtility.generateToken(username, authorities);
 		
 		//Return token, username and authorities to client side
-		UserState userState = new UserState(token, username, authorities);
+		UserState userState = new UserState(token, username, ((UserEntity)authentication.getPrincipal()).getId());
 		return new ResponseEntity<UserState>(userState, HttpStatus.OK);
 	}
 	

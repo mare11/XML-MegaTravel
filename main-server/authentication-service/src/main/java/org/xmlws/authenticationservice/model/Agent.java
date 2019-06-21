@@ -9,6 +9,7 @@
 package org.xmlws.authenticationservice.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -19,9 +20,9 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.xmlws.dataservice.adapter.IntegerAdapter;
 import org.xmlws.dataservice.adapter.LongAdapter;
-import org.xmlws.dataservice.entity.Entity;
 
 
 /**
@@ -111,9 +112,11 @@ import org.xmlws.dataservice.entity.Entity;
     "authority"
 })
 @XmlRootElement(name = "Agent")
-public class Agent extends Entity {
+public class Agent extends UserEntity {
 
-    @XmlElement(required = true)
+	private static final long serialVersionUID = -4987616977211489060L;
+	
+	@XmlElement(required = true)
     protected String username;
     @XmlElement(required = true)
     protected String password;
@@ -361,4 +364,8 @@ public class Agent extends Entity {
         return this.authority;
     }
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.getAuthority();
+	}
 }

@@ -9,6 +9,7 @@
 package org.xmlws.authenticationservice.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -17,7 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.xmlws.dataservice.entity.Entity;
+import org.springframework.security.core.GrantedAuthority;
 
 
 /**
@@ -62,9 +63,11 @@ import org.xmlws.dataservice.entity.Entity;
     "authority"
 })
 @XmlRootElement(name = "Administrator")
-public class Administrator extends Entity {
+public class Administrator extends UserEntity {
 
-    @XmlElement(required = true)
+	private static final long serialVersionUID = 7869231191750062930L;
+	
+	@XmlElement(required = true)
     protected String username;
     @XmlElement(required = true)
     protected String password;
@@ -148,4 +151,8 @@ public class Administrator extends Entity {
         return this.authority;
     }
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.getAuthority();
+	}
 }

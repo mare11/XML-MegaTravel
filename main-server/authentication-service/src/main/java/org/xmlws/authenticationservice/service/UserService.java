@@ -1,11 +1,8 @@
 package org.xmlws.authenticationservice.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +12,6 @@ import org.xmlws.authenticationservice.exceptions.EmailNullPointerException;
 import org.xmlws.authenticationservice.exceptions.UsernameNullPointerException;
 import org.xmlws.authenticationservice.model.Administrator;
 import org.xmlws.authenticationservice.model.Agent;
-import org.xmlws.authenticationservice.model.Authority;
 import org.xmlws.authenticationservice.model.User;
 import org.xmlws.authenticationservice.repository.AdministratorRepository;
 import org.xmlws.authenticationservice.repository.AgentRepository;
@@ -47,20 +43,23 @@ public class UserService implements UserDetailsService {
 		
 		User user = (User) loadByProperty(this.userRepository, "username", username);	
 		if (user != null) {
-			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", user.getAuthority().stream().map(Authority::getAuthority).collect(Collectors.toList())));
-			return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities); 							
+//			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", user.getAuthority().stream().map(Authority::getAuthority).collect(Collectors.toList())));
+//			return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+			return user;
 		} 
 		
 		Agent agent = (Agent) loadByProperty(this.agentRepository, "username", username);	
 		if (agent != null) {
-			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", agent.getAuthority().stream().map(Authority::getAuthority).collect(Collectors.toList())));
-			return new org.springframework.security.core.userdetails.User(agent.getUsername(), agent.getPassword(), authorities); 							
+//			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", agent.getAuthority().stream().map(Authority::getAuthority).collect(Collectors.toList())));
+//			return new org.springframework.security.core.userdetails.User(agent.getUsername(), agent.getPassword(), authorities);
+			return agent;
 		}
 		
 		Administrator admin = (Administrator) loadByProperty(this.adminRepository, "username", username);	
 		if (admin != null) {
-			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", admin.getAuthority().stream().map(Authority::getAuthority).collect(Collectors.toList())));
-			return new org.springframework.security.core.userdetails.User(admin.getUsername(), admin.getPassword(), authorities); 							
+//			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", admin.getAuthority().stream().map(Authority::getAuthority).collect(Collectors.toList())));
+//			return new org.springframework.security.core.userdetails.User(admin.getUsername(), admin.getPassword(), authorities);
+			return admin;
 		} else {
 			throw new UsernameNotFoundException("User with username '" + username + "' is not found.");			
 		}
