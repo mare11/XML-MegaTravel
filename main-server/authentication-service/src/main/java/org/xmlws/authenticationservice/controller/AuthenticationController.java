@@ -1,7 +1,6 @@
 package org.xmlws.authenticationservice.controller;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,13 +15,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.xmlws.authenticationservice.exceptions.UserAlreadyExistsException;
+import org.xmlws.authenticationservice.dto.TokenDataDto;
+import org.xmlws.authenticationservice.dto.UserUniquenessDto;
 import org.xmlws.authenticationservice.exceptions.UsernameNullPointerException;
 import org.xmlws.authenticationservice.exceptions.WrongAuthorityException;
 import org.xmlws.authenticationservice.model.UserEntity;
@@ -101,38 +100,18 @@ public class AuthenticationController {
 																		 .collect(Collectors.toList()));
 	}
 	
-	@RequestMapping(value = "/password/{password}", method = RequestMethod.GET)
-	public String hashPassword(@PathVariable String password) {
-		
-		return this.userService.generatePassword(password);
-	}
-	
-	@RequestMapping(value = "/username/{username}", method = RequestMethod.GET)
-	public ResponseEntity<?> checkUsername(@PathVariable String username) throws UsernameNullPointerException {
-		try {
-			this.userService.loadUserByUsername(username);
-			throw new UserAlreadyExistsException(username);
-		} catch (UsernameNotFoundException e) {
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-	}
-	
-	@RequestMapping(value = "/email/{email}", method = RequestMethod.GET)
-	public ResponseEntity<?> checkEmail(@PathVariable String email) throws AuthenticationException {
-		if (this.userService.checkEmail(email)) {
-			return new ResponseEntity<>(HttpStatus.OK);
+	@RequestMapping(value = "/user", method = RequestMethod.POST)
+	public ResponseEntity<UserUniquenessDto> checkUserUniquenessAndHashPassword(@RequestBody UserUniquenessDto uniquenessDto) throws UsernameNullPointerException {
+		if (this.userService.checkUserUniqueness(uniquenessDto)) {
+			return new ResponseEntity<>(this.userService.generatePassword(uniquenessDto), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}
 	
-	@RequestMapping(value = "/username/token/{token}", method = RequestMethod.GET)
-	public String getUsernameFromToken(@PathVariable String token) throws Exception {
-		return this.tokenUtility.getUsernameFromToken(token);
-	}
-	
-	@RequestMapping(value = "/expirationdate/token/{token}", method = RequestMethod.GET)
-	public Date getExpirationDateFromToken(@PathVariable String token) throws Exception {
-		return this.tokenUtility.getExpirationDateFromToken(token);
+	@RequestMapping(value = "/token/data/{token}", method = RequestMethod.GET)
+	public ResponseEntity<TokenDataDto> getDateFromToken(@PathVariable String token) throws Exception {
+		TokenDataDto tokenDataDto = new TokenDataDto(this.tokenUtility.getUsernameFromToken(token), this.tokenUtility.getExpirationDateFromToken(token));
+		return new ResponseEntity<>(tokenDataDto, HttpStatus.OK);
 	}
 }
