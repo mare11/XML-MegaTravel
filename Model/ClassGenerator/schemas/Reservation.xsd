@@ -44,6 +44,7 @@
 						</xs:appinfo>
                     </xs:annotation>
                 </xs:element>
+                <xs:element name="price" type="res:TPrice"/>
                 <xs:element ref="res:ReservationRating"/>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="res:Message"/>
             </xs:sequence>
@@ -115,6 +116,13 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="AGENT_TO_USER"/>
             <xs:enumeration value="USER_TO_AGENT"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TPrice">
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="6"/>
+            <xs:fractionDigits value="2"/>
+            <xs:minInclusive value="0"/>
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

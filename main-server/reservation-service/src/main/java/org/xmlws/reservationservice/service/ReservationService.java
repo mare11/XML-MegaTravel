@@ -11,14 +11,12 @@ import org.xmlws.dataservice.catalog.CatalogRepository;
 import org.xmlws.reservationservice.exceptions.ReservationCancelingException;
 import org.xmlws.reservationservice.exceptions.ReservationCreatingException;
 import org.xmlws.reservationservice.exceptions.ReservationNotFoundException;
-import org.xmlws.reservationservice.model.Message;
-import org.xmlws.reservationservice.model.Reservation;
-import org.xmlws.reservationservice.model.ReservationCancelling;
-import org.xmlws.reservationservice.model.ReservationRating;
+import org.xmlws.reservationservice.model.*;
 import org.xmlws.reservationservice.repository.ReservationRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -94,8 +92,21 @@ public class ReservationService {
         throw new ReservationCancelingException();
     }
 
-    public List<Reservation> findReservationsByUser(Long userId) {
-        return reservationRepository.findWithFilter("[userId = '" + userId + "']");
+    public List<ReservationDto> findReservationsByUser(Long userId) {
+        List<Reservation> reservations = reservationRepository.findWithFilter("[userId = '" + userId + "']");
+        return reservations.stream().map(reservation -> {
+                    AccommodationDto accommodationDto = webClientBuilder.build()
+                            .get()
+                            .uri("http://accommodation-service/accommodations/" + reservation.getAccommodationId())
+                            .retrieve()
+                            .bodyToMono(AccommodationDto.class)
+                            .doOnError(throwable -> {
+                                throw new ReservationNotFoundException();
+                            })
+                            .block();
+                    return new ReservationDto(reservation.getId(), accommodationDto, reservation.getStartDate(), reservation.getEndDate(), reservation.getPrice().doubleValue());
+                }
+        ).collect(Collectors.toList());
     }
 
     public List<Reservation> findReservationsByAccommodation(Long accommodationId) {

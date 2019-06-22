@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.xmlws.reservationservice.model.Message;
 import org.xmlws.reservationservice.model.Reservation;
+import org.xmlws.reservationservice.model.ReservationDto;
 import org.xmlws.reservationservice.model.ReservationRating;
 import org.xmlws.reservationservice.service.ReservationService;
 
@@ -32,8 +33,8 @@ public class ReservationController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Reservation>> getUserReservations(@PathVariable Long id) {
-        List<Reservation> reservations = reservationService.findReservationsByUser(id);
+    public ResponseEntity<List<ReservationDto>> getUserReservations(@PathVariable Long id) {
+        List<ReservationDto> reservations = reservationService.findReservationsByUser(id);
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 

@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xmlws.accommodationservice.exceptions.AccommodationNotFoundException;
 import org.xmlws.accommodationservice.gen.AccommodationDTO;
-import org.xmlws.accommodationservice.model.Accommodation;
-import org.xmlws.accommodationservice.model.AdditionalService;
-import org.xmlws.accommodationservice.model.Location;
-import org.xmlws.accommodationservice.model.ReservationCancelling;
+import org.xmlws.accommodationservice.model.*;
 import org.xmlws.accommodationservice.repository.AccommodationRepository;
 import org.xmlws.dataservice.catalog.CatalogRepository;
 
@@ -52,6 +49,16 @@ public class AccommodationService {
             accommodationDTO.setLocation(locationService.findOne(accommodation.getLocationId()));
         }
         return accommodationDTO;
+    }
+
+    public AccommodationDto findById(Long accommodationId) {
+        Accommodation accommodation = getAccommodation(accommodationId);
+        AccommodationDto accommodationDto = mapper.map(accommodation, AccommodationDto.class);
+
+        accommodationDto.setAccommodationType(accommodationTypeService.findOne(accommodation.getAccommodationTypeId()));
+        accommodationDto.setLocation(locationService.findOne(accommodation.getLocationId()));
+
+        return accommodationDto;
     }
 
     public AccommodationDTO save(AccommodationDTO accommodationDTO) {
@@ -127,4 +134,5 @@ public class AccommodationService {
         }
         return accommodations.get(0);
     }
+
 }
