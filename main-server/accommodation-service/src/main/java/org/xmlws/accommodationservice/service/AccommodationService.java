@@ -12,7 +12,6 @@ import org.xmlws.dataservice.catalog.CatalogRepository;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AccommodationService {
@@ -134,25 +133,6 @@ public class AccommodationService {
             throw new AccommodationNotFoundException(id);
         }
         return accommodations.get(0);
-    }
-
-    private Double findPriceForRequestedPeriod(Accommodation accommodation, LocalDate startDate, LocalDate endDate) {
-        List<PeriodPrice> periodPrices = accommodation.getPeriodPrice().stream().filter(periodPrice -> {
-            if (((periodPrice.getStartDate().isBefore(startDate) || periodPrice.getStartDate().isEqual(startDate)) &&
-                    (periodPrice.getEndDate().isAfter(startDate) || periodPrice.getEndDate().isEqual(startDate))) ||
-                    ((periodPrice.getStartDate().isBefore(endDate) || periodPrice.getStartDate().isEqual(endDate)) &&
-                            (periodPrice.getEndDate().isAfter(endDate) || periodPrice.getEndDate().isEqual(endDate)))) {
-                return true;
-            } else {
-                return false;
-            }
-        }).collect(Collectors.toList());
-
-        if (periodPrices.isEmpty()) {
-            return accommodation.getDefaultPrice().doubleValue();
-        } else {
-            return periodPrices.get(0).getPrice().doubleValue();
-        }
     }
 
 }
