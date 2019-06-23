@@ -1,0 +1,38 @@
+{
+  "name": "cloud-rating-system",
+  "version": "1.0.0",
+  "description": "Google Cloud Rating system for XML and Web Services project",
+  "scripts": {
+    "lint": "repo-tools lint",
+    "pretest": "npm run lint",
+    "unit-test": "ava --verbose test/*.test.js",
+    "start-proxy": "! pgrep cloud_sql_proxy > /dev/null && cloud_sql_proxy -instances=$INSTANCE_CONNECTION_NAME=tcp:$SQL_PORT &",
+    "system-test": "repo-tools test app -- server.js",
+    "system-test-proxy": "npm run start-proxy; npm run system-test",
+    "all-test": "npm run unit-test && npm run system-test",
+    "test": "repo-tools test run --cmd npm -- run all-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mare11/XML-MegaTravel.git"
+  },
+  "engines": {
+    "node": "10.x.x"
+  },
+  "author": "MegaTravel team",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/mare11/XML-MegaTravel/issues"
+  },
+  "homepage": "https://github.com/mare11/XML-MegaTravel#readme",
+  "dependencies": {
+    "@types/knex": "^0.16.1",
+    "async": "2.6.0",
+    "body-parser": "^1.19.0",
+    "express": "4.16.3",
+    "knex": "0.14.4",
+    "mysql": "^2.17.1",
+    "prompt": "1.0.0",
+    "swagger-ui-express": "^4.0.6"
+  }
+}
