@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -16,4 +17,6 @@ public class ReservationDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private Double price;
+    private Boolean realized;
+    private List<Message> message;
 }

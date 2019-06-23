@@ -1,5 +1,6 @@
 package org.xmlws.reservationservice.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +30,8 @@ public class ReservationService {
 
     @Autowired
     private WebClient.Builder webClientBuilder;
+
+    private ModelMapper mapper = new ModelMapper();
 
     public Reservation createReservation(Reservation reservation) {
         reservation.setRealized(false);
@@ -104,7 +107,9 @@ public class ReservationService {
                                 throw new ReservationNotFoundException();
                             })
                             .block();
-                    return new ReservationDto(reservation.getId(), accommodationDto, reservation.getStartDate(), reservation.getEndDate(), reservation.getPrice().doubleValue());
+                    ReservationDto reservationDto = mapper.map(reservation, ReservationDto.class);
+                    reservationDto.setAccommodation(accommodationDto);
+                    return reservationDto;
                 }
         ).collect(Collectors.toList());
     }
