@@ -24,10 +24,13 @@ router.route('/all/:accommodationId')
 router.route('/published/:accommodationId')
     .get(getPublishedReviews);
 
-router.route('/unpublished/:accommodationId')
+router.route('/unpublished')
     .get(getUnpublishedReviews);
 
 router.route('/average')
+    .get(findAverageRatingForAllAccommodations);
+
+router.route('/average/:accommodationId')
     .get(findAverageAccommodationRating);
 
 router.route('/publish/:reservationId')
@@ -110,8 +113,19 @@ function getPublishedReviews(request, response) {
 function getUnpublishedReviews(request, response) {
     knex(reservationTableName)
         .select('username', 'rating', 'comment', 'timestamp')
-        .where('accommodationId', request.params.accommodationId)
-        .andWhere('published', 0)
+        .where('published', 0)
+        .then((results) => { response.status(200).send(results); })
+        .catch(() => { response.status(400).send(); });
+}
+
+/**
+ * Find average rating for all accommodations
+ */
+function findAverageRatingForAllAccommodations(request, response) {
+    knex(reservationTableName)
+        .groupBy('accommodationId')
+        .select('accommodationId')
+        .avg('rating as averageRating')
         .then((results) => { response.status(200).send(results); })
         .catch(() => { response.status(400).send(); });
 }
@@ -120,8 +134,8 @@ function getUnpublishedReviews(request, response) {
  * Find average rating for the given accommodation
  */
 function findAverageAccommodationRating(request, response) {
-    console.log('asdasdas');
     knex(reservationTableName)
+        .where('accommodationId', request.params.accommodationId)
         .groupBy('accommodationId')
         .select('accommodationId')
         .avg('rating as averageRating')
