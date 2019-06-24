@@ -18,5 +18,6 @@ public class ReservationDto {
     private LocalDate endDate;
     private Double price;
     private Boolean realized;
+    private ReservationRating reservationRating;
     private List<Message> message;
 }

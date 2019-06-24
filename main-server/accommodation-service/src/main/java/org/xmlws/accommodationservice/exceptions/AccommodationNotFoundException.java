@@ -9,4 +9,8 @@ public class AccommodationNotFoundException extends RuntimeException {
 	    public AccommodationNotFoundException(Long id) {
 	        super("Accommodation with id '" + id + "' does not exist!"); 
 	    }
+	    
+	    public AccommodationNotFoundException() {
+	        super("Accommodation does not exist!"); 
+	    }
 }

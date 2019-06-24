@@ -1,12 +1,16 @@
 package org.xmlws.accommodationservice.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.xmlws.accommodationservice.model.AccommodationDto;
+import org.xmlws.accommodationservice.model.AverageRatingDTO;
 import org.xmlws.accommodationservice.model.ReservationCancelling;
+import org.xmlws.accommodationservice.model.ReservationCloudDTO;
 import org.xmlws.accommodationservice.service.AccommodationService;
 
 @RestController
@@ -32,5 +36,35 @@ public class AccommodationController {
     public ResponseEntity<ReservationCancelling> cancelReservation(@RequestBody ReservationCancelling reservationCancelling) {
         reservationCancelling = accommodationService.cancelReservation(reservationCancelling);
         return new ResponseEntity<>(reservationCancelling, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/reviews/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ReservationCloudDTO>> getAllReviews(@PathVariable Long id) {
+       List<ReservationCloudDTO> response = accommodationService.getAllReviews(id);
+       return new ResponseEntity<List<ReservationCloudDTO>>(response, HttpStatus.OK);
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/reviews/published", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ReservationCloudDTO>> getPublishedReviews(@PathVariable Long id) {
+       List<ReservationCloudDTO> response = accommodationService.getPublishedReviews(id);
+       return new ResponseEntity<List<ReservationCloudDTO>>(response, HttpStatus.OK);
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/reviews/unpublished", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ReservationCloudDTO>> getUnpublishedReviews() {
+    	List<ReservationCloudDTO> response = accommodationService.getUnpublishedReviews();
+    	return new ResponseEntity<List<ReservationCloudDTO>>(response, HttpStatus.OK);
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/reviews/average", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AverageRatingDTO>> getAverageRatings() {
+    	List<AverageRatingDTO> response = accommodationService.getAverageRatings();
+    	return new ResponseEntity<List<AverageRatingDTO>>(response, HttpStatus.OK);
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/reviews/average/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AverageRatingDTO> getAverageRating(@PathVariable Long id) {
+    	AverageRatingDTO response = accommodationService.getAverageRating(id);
+    	return new ResponseEntity<AverageRatingDTO>(response, HttpStatus.OK);
     }
 }

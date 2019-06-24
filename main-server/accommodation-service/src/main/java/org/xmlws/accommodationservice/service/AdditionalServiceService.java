@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xmlws.accommodationservice.exceptions.AdditionalServiceException;
 import org.xmlws.accommodationservice.exceptions.AdditionalServiceNotFoundException;
+import org.xmlws.accommodationservice.model.Accommodation;
 import org.xmlws.accommodationservice.model.AdditionalService;
+import org.xmlws.accommodationservice.repository.AccommodationRepository;
 import org.xmlws.accommodationservice.repository.AdditionalServiceRepository;
 import org.xmlws.dataservice.catalog.CatalogRepository;
 
@@ -18,6 +21,9 @@ public class AdditionalServiceService {
 	@Autowired
 	private CatalogRepository catalogRepository;
 
+	@Autowired
+	private AccommodationRepository accommodationRepository;
+	
 	public AdditionalService findOne(Long id) {
 		return getAdditionalService(id);
 	}
@@ -26,13 +32,25 @@ public class AdditionalServiceService {
 		return additionalServiceRepository.findAll();
 	}
 
-	public AdditionalService save(AdditionalService additionalService) {
+	public AdditionalService save(AdditionalService newAdditionalService) {
+		for(AdditionalService additionalService: findAll()){
+			if (additionalService.getAdditionalServiceName().equals(newAdditionalService.getAdditionalServiceName())){
+				throw new AdditionalServiceException(newAdditionalService.getAdditionalServiceName());
+			}
+		}
 		Long id = catalogRepository.getCatalogId(additionalServiceRepository.getRootElementName());
-		additionalService.setId(id);
-		return additionalServiceRepository.save(additionalService);
+		newAdditionalService.setId(id);
+		return additionalServiceRepository.save(newAdditionalService);
 	}
 
 	public void delete(Long id) {
+		for (Accommodation accommodation: accommodationRepository.findAll()){
+			for (Long additionalServiceId : accommodation.getAdditionalServiceIds()){
+				if(additionalServiceId.equals(id)){
+					throw new AdditionalServiceException();
+				}
+			}
+		}
 		AdditionalService additionalService = getAdditionalService(id);
 		additionalServiceRepository.delete(additionalService);
 	}

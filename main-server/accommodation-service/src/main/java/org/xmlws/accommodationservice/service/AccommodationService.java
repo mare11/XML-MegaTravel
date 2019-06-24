@@ -2,8 +2,14 @@ package org.xmlws.accommodationservice.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 import org.xmlws.accommodationservice.exceptions.AccommodationNotFoundException;
+import org.xmlws.accommodationservice.exceptions.AverageRatingException;
 import org.xmlws.accommodationservice.gen.AccommodationDTO;
 import org.xmlws.accommodationservice.model.*;
 import org.xmlws.accommodationservice.repository.AccommodationRepository;
@@ -32,6 +38,9 @@ public class AccommodationService {
 
     @Autowired
     private LocationService locationService;
+    
+    @Autowired
+    private RestTemplate restTemplate;
 
     public AccommodationDTO findOne(Long id) {
         Accommodation accommodation = getAccommodation(id);
@@ -134,5 +143,49 @@ public class AccommodationService {
         }
         return accommodations.get(0);
     }
-
+    
+    public List<ReservationCloudDTO> getAllReviews(Long id) {
+    	try{
+    		ResponseEntity<List<ReservationCloudDTO>> response = restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/all/"+ id, HttpMethod.GET , null, new ParameterizedTypeReference<List<ReservationCloudDTO>>(){});
+    		return response.getBody();
+    	}catch(HttpClientErrorException e){
+    		throw new AccommodationNotFoundException(id);
+    	}
+    }
+    
+    public List<ReservationCloudDTO> getPublishedReviews(Long id) {
+    	try{
+    		ResponseEntity<List<ReservationCloudDTO>> response = restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/published/"+ id, HttpMethod.GET , null, new ParameterizedTypeReference<List<ReservationCloudDTO>>(){});
+    		return response.getBody();
+    	}catch(HttpClientErrorException e){
+    		throw new AccommodationNotFoundException(id);
+    	}
+    }
+    
+    public List<ReservationCloudDTO> getUnpublishedReviews() {
+    	try{
+    		ResponseEntity<List<ReservationCloudDTO>> response = restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/unpublished", HttpMethod.GET , null, new ParameterizedTypeReference<List<ReservationCloudDTO>>(){});
+    		return response.getBody();
+    	}catch(HttpClientErrorException e){
+    		throw new AccommodationNotFoundException();
+    	}
+    }
+    
+    public List<AverageRatingDTO> getAverageRatings(){
+    	try{
+    		ResponseEntity<List<AverageRatingDTO>> response = restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/average", HttpMethod.GET , null, new ParameterizedTypeReference<List<AverageRatingDTO>>(){});
+    		return response.getBody();
+    	}catch(HttpClientErrorException e){
+    		throw new AverageRatingException();
+    	}
+    }
+    
+    public AverageRatingDTO getAverageRating(Long id){
+    	try{
+    		ResponseEntity<List<AverageRatingDTO>> response = restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/average/" + id, HttpMethod.GET , null, new ParameterizedTypeReference<List<AverageRatingDTO>>(){});
+    		return response.getBody().get(0);
+    	}catch(HttpClientErrorException e){
+    		throw new AverageRatingException();
+    	}
+    }
 }
