@@ -27,6 +27,7 @@ public class AccommodationResultDto implements Comparable<AccommodationResultDto
     private Location location;  
     private Double priceForRequestedPeriod;
     private Double distance;
+    private Double averageRating;
     
     @Override
 	public int compareTo(AccommodationResultDto o) {

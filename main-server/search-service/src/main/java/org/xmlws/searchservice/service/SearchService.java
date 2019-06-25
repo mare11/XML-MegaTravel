@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.xmlws.searchservice.dto.AccommodationResultDto;
 import org.xmlws.searchservice.dto.AccommodationSearchDto;
+import org.xmlws.searchservice.dto.AverageRatingDTO;
 import org.xmlws.searchservice.exceptions.AccommodationTypeNotFoundException;
 import org.xmlws.searchservice.exceptions.AdditionalServiceNotFoundException;
 import org.xmlws.searchservice.exceptions.LocationNotFoundException;
@@ -61,6 +62,7 @@ public class SearchService {
 	private Map<Long, AccommodationType> accommodationsTypes = new HashMap<>();
 	private Map<Long, AdditionalService> additionalServices = new HashMap<>();
 	private Map<Long, Location> locations = new HashMap<>();
+	private List<AverageRatingDTO> averageRatings;
 	
 	private DecimalFormat twoPlacesFormat = new DecimalFormat("#.##");
 	private AccommodationComparator accommodationComparator = new AccommodationComparator();
@@ -101,6 +103,7 @@ public class SearchService {
 			resultDto.setAdditionalServices(this.findAllAdditionalServicesByIds(accommodation.getAdditionalServiceIds()));
 			resultDto.setLocation(this.findOneLocationById(accommodation.getLocationId()));
 			resultDto.setPriceForRequestedPeriod(this.findPriceForRequestedPeriod(accommodation, searchDto.getStartDate(), searchDto.getEndDate()));
+			resultDto.setAverageRating(this.findAverageRatingForAccommodation(resultDto.getId()));
 			resultDtos.add(resultDto);
 		}
 		
@@ -326,5 +329,31 @@ public class SearchService {
 		return (resultDtos == null || distanceFromLocation == null) ? null : resultDtos.stream()
 																					    .filter(result -> result.getDistance() <= distanceFromLocation)
 																					    .collect(Collectors.toList());
+	}
+	
+	private Double findAverageRatingForAccommodation(Long id) {
+		if (averageRatings == null) {
+			averageRatings = findAverageRatingsForAllAccommodations();
+		}
+			
+		Double rating = new Double(0.0);
+		for(AverageRatingDTO averageRating : averageRatings) {
+			if (averageRating.getAccommodationId().equals(id)) {
+				rating = averageRating.getAverageRating();
+				break;
+			}
+		}
+		
+		return rating;
+	}
+	
+	private List<AverageRatingDTO> findAverageRatingsForAllAccommodations() {
+		
+		return webClientBuilder.build()
+						       .get()
+						       .uri("http://accommodation-service/accommodations/reviews/average")
+						       .retrieve()
+						       .bodyToMono(new ParameterizedTypeReference<List<AverageRatingDTO>>() {})
+						       .block();
 	}
 }
