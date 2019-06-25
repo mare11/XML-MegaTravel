@@ -49,7 +49,7 @@ public class AccommodationService {
                 accommodationDTO.getPeriodPrice().add(periodPrice));
         accommodation.getUnavailability().stream().forEach(unavailability ->
                 accommodationDTO.getUnavailability().add(unavailability));
-        
+
         if (accommodation.getAccommodationTypeId() != null) {
             accommodationDTO
                     .setAccommodationType(accommodationTypeService.findOne(accommodation.getAccommodationTypeId()));
@@ -193,6 +193,9 @@ public class AccommodationService {
         try {
             ResponseEntity<List<AverageRatingDTO>> response = restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/average/" + id, HttpMethod.GET, null, new ParameterizedTypeReference<List<AverageRatingDTO>>() {
             });
+            if (response.getBody().isEmpty()) {
+                return new AverageRatingDTO(id, 0.0);
+            }
             return response.getBody().get(0);
         } catch (HttpClientErrorException e) {
             throw new AverageRatingException();
