@@ -112,7 +112,7 @@ function getPublishedReviews(request, response) {
  */
 function getUnpublishedReviews(request, response) {
     knex(reservationTableName)
-        .select('username', 'rating', 'comment', 'timestamp')
+        .select('id', 'username', 'rating', 'comment', 'timestamp')
         .where('published', 0)
         .then((results) => { response.status(200).send(results); })
         .catch(() => { response.status(400).send(); });
@@ -161,7 +161,7 @@ function publishComment(request, response) {
 function getUserComments(request, response) {
 
     knex(reservationTableName)
-        .select('rating', 'comment', 'timestamp', 'published')
+        .select('id', 'rating', 'comment', 'timestamp', 'published')
         .where('username', request.params.username)
         .then((results) => {
             results.map(result => result.published = result.published[0] === 1 ? true : false)
