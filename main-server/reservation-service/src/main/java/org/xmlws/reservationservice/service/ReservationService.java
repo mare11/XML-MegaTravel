@@ -1,17 +1,9 @@
 package org.xmlws.reservationservice.service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -23,14 +15,13 @@ import org.xmlws.reservationservice.exceptions.RatingAlreadyExistException;
 import org.xmlws.reservationservice.exceptions.ReservationCancelingException;
 import org.xmlws.reservationservice.exceptions.ReservationCreatingException;
 import org.xmlws.reservationservice.exceptions.ReservationNotFoundException;
-import org.xmlws.reservationservice.model.AccommodationDto;
-import org.xmlws.reservationservice.model.Message;
-import org.xmlws.reservationservice.model.Reservation;
-import org.xmlws.reservationservice.model.ReservationCancelling;
-import org.xmlws.reservationservice.model.ReservationCloudDTO;
-import org.xmlws.reservationservice.model.ReservationDto;
-import org.xmlws.reservationservice.model.ReservationRating;
+import org.xmlws.reservationservice.model.*;
 import org.xmlws.reservationservice.repository.ReservationRepository;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -43,7 +34,7 @@ public class ReservationService {
 
     @Autowired
     private WebClient.Builder webClientBuilder;
-    
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -112,9 +103,10 @@ public class ReservationService {
     }
 
     public List<ReservationDto> findReservationsByUser(Long userId, String username) {
-    	ResponseEntity<List<ReservationCloudDTO>> response = restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/user/"+ username, HttpMethod.GET , null, new ParameterizedTypeReference<List<ReservationCloudDTO>>(){});
+        ResponseEntity<List<ReservationCloudDTO>> response = restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/user/" + username, HttpMethod.GET, null, new ParameterizedTypeReference<List<ReservationCloudDTO>>() {
+        });
         List<ReservationCloudDTO> ratings = response.getBody();
-    	List<Reservation> reservations = reservationRepository.findWithFilter("[userId = '" + userId + "']");
+        List<Reservation> reservations = reservationRepository.findWithFilter("[userId = '" + userId + "']");
         return reservations.stream().map(reservation -> {
                     AccommodationDto accommodationDto = webClientBuilder.build()
                             .get()
@@ -126,11 +118,11 @@ public class ReservationService {
                             })
                             .block();
                     ReservationDto reservationDto = mapper.map(reservation, ReservationDto.class);
-                    for (ReservationCloudDTO rating: ratings){
-                    	if (rating.getId().equals(reservationDto.getId())){
-                    		reservationDto.setReservationRating(new ReservationRating(rating.getRating(), rating.getComment(), rating.getTimestamp(), rating.getPublished()));
-                    		break;
-                    	}
+                    for (ReservationCloudDTO rating : ratings) {
+                        if (rating.getId().equals(reservationDto.getId())) {
+                            reservationDto.setReservationRating(new ReservationRating(rating.getRating(), rating.getComment(), rating.getTimestamp(), rating.getPublished()));
+                            break;
+                        }
                     }
                     reservationDto.setAccommodation(accommodationDto);
                     return reservationDto;
@@ -144,6 +136,9 @@ public class ReservationService {
 
     public Message addMessage(Long id, Message message) {
         Reservation reservation = getReservation(id);
+        if (reservation.getStartDate().isBefore(LocalDate.now())) {
+            throw new ReservationNotFoundException();
+        }
         message.setTimestamp(LocalDateTime.now());
         reservation.getMessage().add(message);
         reservationRepository.save(reservation);
@@ -151,19 +146,19 @@ public class ReservationService {
     }
 
     public ReservationCloudDTO addRating(ReservationCloudDTO reservationDTO) {
-       	try{
-       		HttpEntity<ReservationCloudDTO> request = new HttpEntity<>(reservationDTO);
-       		return restTemplate.postForObject("https://xml-megatravel.appspot.com/api/reviews", request, ReservationCloudDTO.class);
-    	}catch(HttpClientErrorException e){
-    		throw new RatingAlreadyExistException();
-    	}
+        try {
+            HttpEntity<ReservationCloudDTO> request = new HttpEntity<>(reservationDTO);
+            return restTemplate.postForObject("https://xml-megatravel.appspot.com/api/reviews", request, ReservationCloudDTO.class);
+        } catch (HttpClientErrorException e) {
+            throw new RatingAlreadyExistException();
+        }
     }
 
     public ResponseEntity<?> publishComment(Long id) {
-        try{
-        	return restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/publish/"+ id, HttpMethod.PUT , null, Void.class);
-        }catch(HttpClientErrorException e){
-        	throw new ReservationNotFoundException();
+        try {
+            return restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/publish/" + id, HttpMethod.PUT, null, Void.class);
+        } catch (HttpClientErrorException e) {
+            throw new ReservationNotFoundException();
         }
     }
 
