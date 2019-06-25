@@ -55,8 +55,8 @@ public class ReservationController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/rating", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addRating(@RequestBody ReservationCloudDTO reservationDTO) {
-        return reservationService.addRating(reservationDTO);
+    public ResponseEntity<ReservationCloudDTO> addRating(@RequestBody ReservationCloudDTO reservationDTO) {
+        return new ResponseEntity<ReservationCloudDTO>(reservationService.addRating(reservationDTO), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}/comment", produces = MediaType.APPLICATION_JSON_VALUE)

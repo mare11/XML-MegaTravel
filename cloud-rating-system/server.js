@@ -77,7 +77,7 @@ function addRating(request, response) {
 
     knex(reservationTableName)
         .insert(reservation)
-        .then(() => { response.status(200).send(); })
+        .then(() => { response.status(200).send(reservation); })
         .catch(() => { response.status(400).send(); });
 }
 

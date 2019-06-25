@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AccommodationDto {
 
+	private Long id;
     private AccommodationType accommodationType;
     private Integer category;
     private Boolean freeCancellation;

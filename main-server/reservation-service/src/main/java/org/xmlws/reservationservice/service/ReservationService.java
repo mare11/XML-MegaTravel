@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -149,9 +150,10 @@ public class ReservationService {
         return message;
     }
 
-    public ResponseEntity<?> addRating(ReservationCloudDTO reservationDTO) {
+    public ReservationCloudDTO addRating(ReservationCloudDTO reservationDTO) {
        	try{
-    		return restTemplate.postForEntity("https://xml-megatravel.appspot.com/api/reviews", reservationDTO, Void.class);
+       		HttpEntity<ReservationCloudDTO> request = new HttpEntity<>(reservationDTO);
+       		return restTemplate.postForObject("https://xml-megatravel.appspot.com/api/reviews", request, ReservationCloudDTO.class);
     	}catch(HttpClientErrorException e){
     		throw new RatingAlreadyExistException();
     	}
