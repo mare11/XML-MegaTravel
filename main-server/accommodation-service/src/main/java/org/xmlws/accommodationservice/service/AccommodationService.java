@@ -17,6 +17,7 @@ import org.xmlws.dataservice.catalog.CatalogRepository;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,25 +45,17 @@ public class AccommodationService {
 
     public AccommodationDTO findOne(Long id) {
         Accommodation accommodation = getAccommodation(id);
-        AccommodationDTO accommodationDTO = mapper.map(accommodation, AccommodationDTO.class);
-        accommodation.getPeriodPrice().stream().forEach(periodPrice ->
-                accommodationDTO.getPeriodPrice().add(periodPrice));
-        accommodation.getUnavailability().stream().forEach(unavailability ->
-                accommodationDTO.getUnavailability().add(unavailability));
-
-        if (accommodation.getAccommodationTypeId() != null) {
-            accommodationDTO
-                    .setAccommodationType(accommodationTypeService.findOne(accommodation.getAccommodationTypeId()));
-        }
-        if (accommodation.getAdditionalServiceIds() != null && !accommodation.getAdditionalServiceIds().isEmpty()) {
-            for (Long additionalServiceId : accommodation.getAdditionalServiceIds()) {
-                accommodationDTO.getAdditionalService().add(additionalServiceService.findOne(additionalServiceId));
-            }
-        }
-        if (accommodation.getLocationId() != null) {
-            accommodationDTO.setLocation(locationService.findOne(accommodation.getLocationId()));
-        }
-        return accommodationDTO;
+        return transformAccommodation(accommodation);
+    }
+    
+    public List<AccommodationDTO> findAccommodations(Long agentId){
+    	List<Accommodation> accommodations = accommodationRepository.findWithFilter("[agentId='" + agentId + "']");
+    	List<AccommodationDTO> accommodationsDTOs = new ArrayList<>();
+    	for (Accommodation accommodation : accommodations){
+			AccommodationDTO accommodationDTO = transformAccommodation(accommodation);
+			accommodationsDTOs.add(accommodationDTO);
+    	}
+    	return accommodationsDTOs;
     }
 
     public AccommodationDto findById(Long accommodationId) {
@@ -200,5 +193,27 @@ public class AccommodationService {
         } catch (HttpClientErrorException e) {
             throw new AverageRatingException();
         }
+    }
+    
+    private AccommodationDTO transformAccommodation(Accommodation accommodation){
+    	AccommodationDTO accommodationDTO = mapper.map(accommodation, AccommodationDTO.class);
+        accommodation.getPeriodPrice().stream().forEach(periodPrice ->
+                accommodationDTO.getPeriodPrice().add(periodPrice));
+        accommodation.getUnavailability().stream().forEach(unavailability ->
+                accommodationDTO.getUnavailability().add(unavailability));
+
+        if (accommodation.getAccommodationTypeId() != null) {
+            accommodationDTO
+                    .setAccommodationType(accommodationTypeService.findOne(accommodation.getAccommodationTypeId()));
+        }
+        if (accommodation.getAdditionalServiceIds() != null && !accommodation.getAdditionalServiceIds().isEmpty()) {
+            for (Long additionalServiceId : accommodation.getAdditionalServiceIds()) {
+                accommodationDTO.getAdditionalService().add(additionalServiceService.findOne(additionalServiceId));
+            }
+        }
+        if (accommodation.getLocationId() != null) {
+            accommodationDTO.setLocation(locationService.findOne(accommodation.getLocationId()));
+        }
+        return accommodationDTO;
     }
 }

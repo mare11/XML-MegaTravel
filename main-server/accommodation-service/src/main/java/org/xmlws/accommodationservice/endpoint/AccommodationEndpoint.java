@@ -42,8 +42,8 @@ public class AccommodationEndpoint {
 	@ResponsePayload
 	public GetAccommodationResponse getAccommodation(@RequestPayload GetAccommodationRequest request) {
 		GetAccommodationResponse response = new GetAccommodationResponse();
-		AccommodationDTO accommodationDTO = accommodationService.findOne(request.getId());
-		response.setAccommodationDTO(accommodationDTO);
+		List<AccommodationDTO> accommodationDTO = accommodationService.findAccommodations(request.getId());
+		response.getAccommodationDTO().addAll(accommodationDTO);
 		return response;
 	}
 

@@ -22,7 +22,7 @@
     <xs:element name="getAccommodationResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="tns:AccommodationDTO"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:AccommodationDTO"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

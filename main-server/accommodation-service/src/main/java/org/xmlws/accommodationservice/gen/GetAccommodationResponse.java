@@ -8,6 +8,9 @@
 
 package org.xmlws.accommodationservice.gen;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -42,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetAccommodationResponse {
 
     @XmlElement(name = "AccommodationDTO", required = true)
-    protected AccommodationDTO accommodationDTO;
+    protected List<AccommodationDTO> accommodationDTO;
 
     /**
      * Gets the value of the accommodationDTO property.
@@ -52,20 +55,10 @@ public class GetAccommodationResponse {
      *     {@link AccommodationDTO }
      *     
      */
-    public AccommodationDTO getAccommodationDTO() {
+    public List<AccommodationDTO> getAccommodationDTO() {
+    	if (accommodationDTO == null) {
+            accommodationDTO = new ArrayList<AccommodationDTO>();
+        }
         return accommodationDTO;
     }
-
-    /**
-     * Sets the value of the accommodationDTO property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AccommodationDTO }
-     *     
-     */
-    public void setAccommodationDTO(AccommodationDTO value) {
-        this.accommodationDTO = value;
-    }
-
 }
