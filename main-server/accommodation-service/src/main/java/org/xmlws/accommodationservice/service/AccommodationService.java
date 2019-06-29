@@ -84,11 +84,10 @@ public class AccommodationService {
             Location location = locationService.findOneByLatitudeAndLongitude(
                     accommodationDTO.getLocation().getLatitude(), accommodationDTO.getLocation().getLongitude());
             if (location == null) {
-                Location savedLocation = locationService.save(accommodationDTO.getLocation());
-                accommodation.setLocationId(savedLocation.getId());
-            } else {
-                accommodation.setLocationId(location.getId());
+                location = locationService.save(accommodationDTO.getLocation());
             }
+			accommodation.setLocationId(location.getId());
+			accommodationDTO.setLocation(location);
         }
         accommodation = accommodationRepository.save(accommodation);
         accommodationDTO.setId(accommodation.getId());
@@ -96,15 +95,18 @@ public class AccommodationService {
     }
 
     public AccommodationDTO update(AccommodationDTO accommodationDTO) {
-        Accommodation accommodation = getAccommodation(accommodationDTO.getId());
-        accommodation = mapper.map(accommodationDTO, Accommodation.class);
+        Accommodation accommodation = mapper.map(accommodationDTO, Accommodation.class);
         accommodation.setAccommodationTypeId(accommodationDTO.getAccommodationType().getId());
         accommodation.getAdditionalServiceIds().clear();
         for (AdditionalService additionalService : accommodationDTO.getAdditionalService()) {
             accommodation.getAdditionalServiceIds().add(additionalService.getId());
         }
         accommodation.setLocationId(accommodationDTO.getLocation().getId());
-        accommodation = accommodationRepository.save(accommodation);
+		accommodationDTO.getPeriodPrice().stream().forEach(periodPrice ->
+                accommodation.getPeriodPrice().add(periodPrice));
+        accommodationDTO.getUnavailability().stream().forEach(unavailability ->
+                accommodation.getUnavailability().add(unavailability));
+        accommodationRepository.save(accommodation);
         return accommodationDTO;
     }
 
