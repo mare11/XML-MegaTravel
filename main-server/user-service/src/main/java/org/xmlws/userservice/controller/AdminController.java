@@ -31,22 +31,10 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Administrator>> getAllAdmins() {
-        List<Administrator> admins = this.adminService.findAllAdmins();
-        return new ResponseEntity<>(admins, HttpStatus.OK);
-    }
-
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Administrator> addAdmin(@RequestBody Administrator administrator) {
         administrator = adminService.addAdmin(administrator);
         return new ResponseEntity<>(administrator, HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Administrator> deleteAdmin(@RequestBody Administrator administrator) {
-        adminService.deleteAdmin(administrator);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/agents", produces = MediaType.APPLICATION_JSON_VALUE)

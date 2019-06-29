@@ -144,16 +144,6 @@ public class AccommodationService {
         return accommodations.get(0);
     }
 
-    public List<ReservationCloudDTO> getAllReviews(Long id) {
-        try {
-            ResponseEntity<List<ReservationCloudDTO>> response = restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/all/" + id, HttpMethod.GET, null, new ParameterizedTypeReference<List<ReservationCloudDTO>>() {
-            });
-            return response.getBody();
-        } catch (HttpClientErrorException e) {
-            throw new AccommodationNotFoundException(id);
-        }
-    }
-
     public List<ReservationCloudDTO> getPublishedReviews(Long id) {
         try {
             ResponseEntity<List<ReservationCloudDTO>> response = restTemplate.exchange("https://xml-megatravel.appspot.com/api/reviews/published/" + id, HttpMethod.GET, null, new ParameterizedTypeReference<List<ReservationCloudDTO>>() {

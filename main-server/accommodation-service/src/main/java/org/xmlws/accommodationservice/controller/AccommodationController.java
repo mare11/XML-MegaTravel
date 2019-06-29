@@ -45,12 +45,6 @@ public class AccommodationController {
         return new ResponseEntity<>(reservationCancelling, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}/reviews/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ReservationCloudDTO>> getAllReviews(@PathVariable Long id) {
-        List<ReservationCloudDTO> response = accommodationService.getAllReviews(id);
-        return new ResponseEntity<List<ReservationCloudDTO>>(response, HttpStatus.OK);
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/reviews/published", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ReservationCloudDTO>> getPublishedReviews(@PathVariable Long id) {
         List<ReservationCloudDTO> response = accommodationService.getPublishedReviews(id);

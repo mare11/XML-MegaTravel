@@ -1,5 +1,9 @@
 package org.xmlws.authenticationservice.controller;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,9 +13,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.xmlws.authenticationservice.dto.TokenDataDto;
 import org.xmlws.authenticationservice.dto.UserUniquenessDto;
 import org.xmlws.authenticationservice.exceptions.UsernameNullPointerException;
@@ -22,10 +29,6 @@ import org.xmlws.authenticationservice.security.AuthenticationRequest;
 import org.xmlws.authenticationservice.security.TokenUtility;
 import org.xmlws.authenticationservice.security.UserState;
 import org.xmlws.authenticationservice.service.UserService;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/authentication")
@@ -52,12 +55,11 @@ public class AuthenticationController {
         }
 
         List<String> authorities = tokenUtility.getAuthoritiesFromToken(token);
-        if (!authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
-                .containsAll(user.getAuthorities().stream().collect(Collectors.toList()))) {
+        if (!authorities.containsAll(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))) {
             return null;
         }
 
-        return new UserState(token, username, user.getId());
+        return new UserState(token, username, user.getId(), authorities);
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -83,7 +85,7 @@ public class AuthenticationController {
         String token = tokenUtility.generateToken(username, authorities);
 
         //Return token, username and authorities to client side
-        UserState userState = new UserState(token, username, ((UserEntity) authentication.getPrincipal()).getId());
+        UserState userState = new UserState(token, username, ((UserEntity) authentication.getPrincipal()).getId(), authorities);
         return new ResponseEntity<UserState>(userState, HttpStatus.OK);
     }
 
