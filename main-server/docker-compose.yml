@@ -1,6 +1,15 @@
 version: '3'
 services:
 
+  exist:
+    image: exist
+    container_name: exist
+    build:
+      context: ./exist
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
   discovery:
     image: discovery-service
     container_name: discovery-service
@@ -17,20 +26,7 @@ services:
       context: ./gateway-service
       dockerfile: Dockerfile
     ports:
-      - "8762:8762"
-    depends_on:
-      - discovery
-    links:
-      - discovery:discovery
-
-  exist-db-service:
-    image: exist-db-service
-    container_name: exist-db-service
-    build:
-      context: ./exist-db-service
-      dockerfile: Dockerfile
-    ports:
-      - "8087:8087"
+      - "8090:8090"
     depends_on:
       - discovery
     links:
@@ -39,17 +35,17 @@ services:
   accommodation-service:
     image: accommodation-service
     build:
-      context: ./accommodation-service
-      dockerfile: Dockerfile
+     context: ./accommodation-service
+     dockerfile: Dockerfile
     ports:
-      - "2222"
+     - "8081:8081"
     depends_on:
-      - discovery
-      - exist-db-service
+     - discovery
+     - exist
     links:
-      - discovery:discovery
-      - exist-db-service:exist-db-service
-
+     - discovery:discovery
+     - exist:exist
+    
   authentication-service:
     image: authentication-service
     build:
@@ -59,39 +55,44 @@ services:
       - "2222"
     depends_on:
       - discovery
-
-      - exist-db-service
+      - exist
     links:
       - discovery:discovery
-      - exist-db-service:exist-db-service
-      
+      - exist:exist
+  
   registration-service:
     image: registration-service
     build:
       context: ./registration-service
       dockerfile: Dockerfile
     ports:
-      - "2222"
+      - "8083:8083"
     depends_on:
       - discovery
-      - exist-db-service
+      - exist
+      - authentication-service
     links:
       - discovery:discovery
-      - exist-db-service:exist-db-service
- 
+      - exist:exist
+      - authentication-service:authentication-service
+  
   reservation-service:
     image: reservation-service
     build:
       context: ./reservation-service
       dockerfile: Dockerfile
     ports:
-      - "2222"
+      - "8084:8084"
     depends_on:
       - discovery
-      - exist-db-service
+      - exist
+      - accommodation-service
+      - user-service
     links:
       - discovery:discovery
-      - exist-db-service:exist-db-service
+      - exist:exist
+      - accommodation-service:accommodation-service
+      - user-service:user-service
 
   search-service:
     image: search-service
@@ -102,10 +103,12 @@ services:
       - "2222"
     depends_on:
       - discovery
-      - exist-db-service
+      - exist
+      - reservation-service
     links:
       - discovery:discovery
-      - exist-db-service:exist-db-service
+      - exist:exist
+      - reservation-service:reservation-service
 
   user-service:
     image: user-service
@@ -116,7 +119,7 @@ services:
       - "2222"
     depends_on:
       - discovery
-      - exist-db-service
+      - exist
     links:
       - discovery:discovery
-      - exist-db-service:exist-db-service
+      - exist:exist

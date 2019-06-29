@@ -59,24 +59,18 @@
 		    <groupId>org.xmlws.dataservice</groupId>
 		    <artifactId>exist-xqj</artifactId>
 		    <version>1.0.1</version>
-		    <scope>system</scope>
-		    <systemPath>${project.basedir}/lib/exist-xqj-1.0.1.jar</systemPath>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.xmlws.dataservice</groupId>
 		    <artifactId>xqj2</artifactId>
 		    <version>0.0.1</version>
-		    <scope>system</scope>
-		    <systemPath>${project.basedir}/lib/xqj2-0.0.1.jar</systemPath>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.xmlws.dataservice</groupId>
 		    <artifactId>data-service</artifactId>
 		    <version>0.0.1</version>
-		    <scope>system</scope>
-		    <systemPath>${project.basedir}/lib/data-service-0.0.1-SNAPSHOT-jar-with-dependencies.jar</systemPath>
 		</dependency>
 		
 		<dependency>
