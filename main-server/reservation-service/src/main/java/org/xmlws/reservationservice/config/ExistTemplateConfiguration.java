@@ -14,7 +14,8 @@ import javax.xml.xquery.XQException;
 @Configuration
 public class ExistTemplateConfiguration {
 
-    @Value("${exist.datasource.server-firstName:localhost}")
+    //    @Value("${exist.datasource.server-firstName:localhost}")
+    @Value("${exist.datasource.server-firstName:exist}")
     private String serverName;
 
     @Value("${exist.datasource.port:8080}")

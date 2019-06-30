@@ -1,8 +1,6 @@
 package org.xmlws.searchservice.config;
 
-import javax.xml.xquery.XQDataSource;
-import javax.xml.xquery.XQException;
-
+import net.xqj.exist.ExistXQDataSource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,12 +9,14 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.xmlws.dataservice.catalog.CatalogRepository;
 import org.xmlws.dataservice.config.exist.ExistTemplate;
 
-import net.xqj.exist.ExistXQDataSource;
+import javax.xml.xquery.XQDataSource;
+import javax.xml.xquery.XQException;
 
 @Configuration
 public class ExistTemplateConfiguration {
 
-    @Value("${exist.datasource.server-name:localhost}")
+    //    @Value("${exist.datasource.server-name:localhost}")
+    @Value("${exist.datasource.server-name:exist}")
     private String serverName;
 
     @Value("${exist.datasource.port:8080}")
@@ -42,21 +42,21 @@ public class ExistTemplateConfiguration {
     ExistTemplate existTemplate() {
         return new ExistTemplate();
     }
-    
+
     @Bean
     Jaxb2Marshaller marshaller() {
-    	Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-    	marshaller.setPackagesToScan("org.xmlws");
-    	return marshaller;
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        marshaller.setPackagesToScan("org.xmlws");
+        return marshaller;
     }
-    
+
     @Bean
     CatalogRepository catalogRepository() {
-    	return new CatalogRepository();
+        return new CatalogRepository();
     }
-    
+
     @Bean
     ModelMapper modelMapper() {
-    	return new ModelMapper();
+        return new ModelMapper();
     }
 }
